@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/widgets/header.dart';
 import 'package:go_shop_admin_panel/widgets/products_widget.dart';
 
@@ -17,6 +18,25 @@ class _DashBoardState extends State<DashBoard> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Header(),
+            Text("Latest products", style: kTextStyle(20, context)),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.picture_in_picture),
+                    label: Text("View all"),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.add_a_photo),
+                    label: Text("Add new"),
+                  ),
+                ],
+              ),
+            ),
             ProductWidget(
               imgPath: 'assets/images/offers/laptop.png',
             ),
