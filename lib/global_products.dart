@@ -1,4 +1,4 @@
-import 'models/product.dart';
+import 'model/product.dart';
 
 class GlobalProducts {
   static String basePath = 'assets/images/offers';
