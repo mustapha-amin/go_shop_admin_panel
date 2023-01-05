@@ -22,7 +22,7 @@ class _ProductWidgetState extends State<ProductWidget> {
       child: Card(
         elevation: 1,
         color: Utils(context).isDark
-            ? Colors.lightBlueAccent.withOpacity(0.01)
+            ? Colors.grey[700]
             : Colors.lightBlueAccent.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
