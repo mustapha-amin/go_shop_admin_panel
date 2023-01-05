@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/services/utils.dart';
 
 class ProductWidget extends StatefulWidget {
@@ -41,8 +42,14 @@ class _ProductWidgetState extends State<ProductWidget> {
                     fit: BoxFit.fill,
                     height: size.height / 5,
                   ),
-                  const Text("title"),
-                  const Text("N10, 000"),
+                  Text(
+                    "title",
+                    style: kTextStyle(20, context),
+                  ),
+                  Text(
+                    "N10, 000",
+                    style: kTextStyle(15, context),
+                  ),
                 ],
               ),
               PopupMenuButton(
