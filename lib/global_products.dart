@@ -36,7 +36,7 @@ class GlobalProducts {
     ),
   ];
 
-  List<Category> categories = [
+  static List<Category> categories = [
     Category(name: "Shoes", imgPath: '$basePath/shoes.png'),
     Category(name: "Clothes", imgPath: '$basePath/clothes.png'),
     Category(name: "Laptops", imgPath: '$basePath/computers.png'),
