@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/providers/theme_provider.dart';
+import 'package:go_shop_admin_panel/screens/product_categories.dart';
 import 'package:go_shop_admin_panel/services/theme_prefs.dart';
 import 'package:go_shop_admin_panel/widgets/drawer_listtile.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,16 @@ class _SideMenuState extends State<SideMenu> {
           ),
           DrawerListTile(title: "Main", press: () {}, icon: Icons.home_filled),
           DrawerListTile(
-              title: "View all products", press: () {}, icon: Icons.store),
+              title: "View all products",
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewAllProducts(),
+                  ),
+                );
+              },
+              icon: Icons.store),
           DrawerListTile(
             title: "View orders",
             press: () {},
