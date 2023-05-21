@@ -1,3 +1,4 @@
+import 'model/category.dart';
 import 'model/product.dart';
 
 class GlobalProducts {
@@ -33,5 +34,16 @@ class GlobalProducts {
       imgPath: '$basePath/laptop.png',
       price: 90000,
     ),
+  ];
+
+  List<Category> categories = [
+    Category(name: "Shoes", imgPath: '$basePath/shoes.png'),
+    Category(name: "Clothes", imgPath: '$basePath/clothes.png'),
+    Category(name: "Laptops", imgPath: '$basePath/computers.png'),
+    Category(name: "Assesories", imgPath: '$basePath/assesories.png'),
+    Category(name: "Smartphones", imgPath: '$basePath/smartphones.png'),
+    Category(name: "Watches", imgPath: '$basePath/watches.png'),
+    Category(name: "Gaming", imgPath: '$basePath/gaming.png'),
+    Category(name: "Electronics", imgPath: '$basePath/electronics.png'),
   ];
 }
