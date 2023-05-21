@@ -2,48 +2,51 @@ import 'model/category.dart';
 import 'model/product.dart';
 
 class GlobalProducts {
-  static String basePath = 'assets/images/offers';
+  static String productsBasePath = 'assets/images/offers';
+  static String categoriesBasePath = 'assets/images/categories';
   static List<Product> products = [
     Product(
       name: "Nike air",
-      imgPath: '$basePath/shoe.png',
+      imgPath: '$productsBasePath/shoe.png',
       price: 80000,
     ),
     Product(
       name: "T-shirt",
-      imgPath: '$basePath/shirt.png',
+      imgPath: '$productsBasePath/shirt.png',
       price: 75000,
     ),
     Product(
       name: "HP laptop",
-      imgPath: '$basePath/laptop.png',
+      imgPath: '$productsBasePath/laptop.png',
       price: 90000,
     ),
     Product(
       name: "Nike air",
-      imgPath: '$basePath/shoe.png',
+      imgPath: '$productsBasePath/shoe.png',
       price: 80000,
     ),
     Product(
       name: "T-shirt",
-      imgPath: '$basePath/shirt.png',
+      imgPath: '$productsBasePath/shirt.png',
       price: 75000,
     ),
     Product(
       name: "HP laptop",
-      imgPath: '$basePath/laptop.png',
+      imgPath: '$productsBasePath/laptop.png',
       price: 90000,
     ),
   ];
 
   static List<Category> categories = [
-    Category(name: "Shoes", imgPath: '$basePath/shoes.png'),
-    Category(name: "Clothes", imgPath: '$basePath/clothes.png'),
-    Category(name: "Laptops", imgPath: '$basePath/computers.png'),
-    Category(name: "Assesories", imgPath: '$basePath/assesories.png'),
-    Category(name: "Smartphones", imgPath: '$basePath/smartphones.png'),
-    Category(name: "Watches", imgPath: '$basePath/watches.png'),
-    Category(name: "Gaming", imgPath: '$basePath/gaming.png'),
-    Category(name: "Electronics", imgPath: '$basePath/electronics.png'),
+    Category(name: "Shoes", imgPath: '$categoriesBasePath/shoes.png'),
+    Category(name: "Clothes", imgPath: '$categoriesBasePath/clothes.png'),
+    Category(name: "Laptops", imgPath: '$categoriesBasePath/computers.png'),
+    Category(name: "Assesories", imgPath: '$categoriesBasePath/assesories.png'),
+    Category(
+        name: "Smartphones", imgPath: '$categoriesBasePath/smartphones.png'),
+    Category(name: "Watches", imgPath: '$categoriesBasePath/watches.png'),
+    Category(name: "Gaming", imgPath: '$categoriesBasePath/gaming.png'),
+    Category(
+        name: "Electronics", imgPath: '$categoriesBasePath/electronics.png'),
   ];
 }
