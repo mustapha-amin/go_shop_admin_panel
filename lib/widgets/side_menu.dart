@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/providers/theme_provider.dart';
+import 'package:go_shop_admin_panel/screens/orders_page.dart';
 import 'package:go_shop_admin_panel/screens/product_categories.dart';
 import 'package:go_shop_admin_panel/services/theme_prefs.dart';
 import 'package:go_shop_admin_panel/widgets/drawer_listtile.dart';
@@ -40,7 +41,11 @@ class _SideMenuState extends State<SideMenu> {
               icon: Icons.store),
           DrawerListTile(
             title: "View orders",
-            press: () {},
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return OrdersScreen();
+              }));
+            },
             icon: Icons.shopping_bag_rounded,
           ),
           ListTile(
