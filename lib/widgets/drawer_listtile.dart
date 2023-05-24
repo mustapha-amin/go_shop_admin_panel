@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/consts/textstyle.dart';
 
 class DrawerListTile extends StatelessWidget {
   final String title;
@@ -15,7 +16,10 @@ class DrawerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title),
+      title: Text(
+        title,
+        style: kTextStyle(17, context),
+      ),
       leading: Icon(
         icon,
         size: 20,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/controllers/menu_controller.dart';
+import 'package:go_shop_admin_panel/providers/theme_provider.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
+import 'package:go_shop_admin_panel/services/theme_prefs.dart';
 import 'package:go_shop_admin_panel/services/utils.dart';
 import 'package:go_shop_admin_panel/widgets/search_bar.dart' as custom;
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
@@ -39,21 +41,28 @@ class Header extends StatelessWidget {
                 const custom.SearchBar()
               ],
             )
-          : Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Dashboard",
-                      style: kTextStyle(20, context),
-                    ),
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Dashboard",
+                    style: kTextStyle(30, context),
                   ),
-                  addHorizontalSpacing(size.width * .3),
-                  const custom.SearchBar(),
-                ],
-              ),
+                ),
+                addHorizontalSpacing(size.width * .3),
+                const custom.SearchBar(),
+                Responsive.isTablet(context)
+                    ? IconButton(
+                        onPressed: () {
+                          context.read<ThemeProvider>().toggleTheme();
+                        },
+                        icon: Utils(context).isDark
+                            ? Icon(Icons.light_mode)
+                            : Icon(Icons.dark_mode))
+                    : SizedBox()
+              ],
             ),
     );
   }

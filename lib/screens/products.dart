@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/widgets/products_widget.dart';
 
 import '../global_products.dart';
@@ -24,8 +25,11 @@ class _ProductsPageState extends State<ProductsPage> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
         child: GridView.builder(
           itemCount: GlobalProducts.products.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount:
+                Responsive.isTablet(context) || Responsive.isPC(context)
+                    ? 4
+                    : 2,
             // childAspectRatio: 1,
             crossAxisSpacing: 5,
             mainAxisSpacing: 3,
