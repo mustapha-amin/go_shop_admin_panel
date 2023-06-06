@@ -1,10 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/model/category.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/widgets/category_widget.dart';
+import 'package:sizer/sizer.dart';
 
 class ViewCategories extends StatefulWidget {
   const ViewCategories({super.key});
@@ -18,6 +20,13 @@ class _ViewCategoriesState extends State<ViewCategories> {
   Widget build(BuildContext context) {
     Database database = Database();
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Categories",
+          style: kTextStyle(18.sp, context),
+        ),
+        centerTitle: true,
+      ),
       body: StreamBuilder(
         stream: database.getCategories(),
         builder: (context, snapshot) {
