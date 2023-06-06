@@ -1,53 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:go_shop_admin_panel/global_products.dart';
-import 'package:go_shop_admin_panel/services/utils.dart';
+import 'package:go_shop_admin_panel/consts/textstyle.dart';
+import 'package:go_shop_admin_panel/model/category.dart';
+import 'package:go_shop_admin_panel/responsive.dart';
+import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/widgets/category_widget.dart';
+import 'package:sizer/sizer.dart';
 
-import '../responsive.dart';
-import '../widgets/products_widget.dart';
-import 'products.dart';
-
-class ViewAllProducts extends StatefulWidget {
-  const ViewAllProducts({super.key});
+class ProductCategories extends StatefulWidget {
+  const ProductCategories({super.key});
 
   @override
-  State<ViewAllProducts> createState() => _ViewAllProductsState();
+  State<ProductCategories> createState() => _ProductCategoriesState();
 }
 
-class _ViewAllProductsState extends State<ViewAllProducts> {
+class _ProductCategoriesState extends State<ProductCategories> {
   @override
   Widget build(BuildContext context) {
+    Database database = Database();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        foregroundColor: Utils(context).color,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          itemCount: GlobalProducts.products.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount:
-                Responsive.isTablet(context) || Responsive.isPC(context)
-                    ? 4
-                    : 2,
-            // childAspectRatio: 1,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 3,
-          ),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProductsPage()));
-              },
-              child: CategoryWidget(
-                category: GlobalProducts.categories[index],
-              ),
-            );
-          },
+        title: Text(
+          "Categories",
+          style: kTextStyle(18.sp, context),
         ),
+        centerTitle: true,
+      ),
+      body: StreamBuilder(
+        stream: database.getCategories(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Category> categories = snapshot.data!;
+            return GridView.builder(
+                itemCount: categories.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
+                ),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CategoryWidget(
+                      category: categories[index],
+                    ),
+                  );
+                });
+          } else if (!snapshot.hasData) {
+            return const Text("No category added yet");
+          }
+          return const Center(
+            child: Text("No category added yet"),
+          );
+        },
       ),
     );
   }

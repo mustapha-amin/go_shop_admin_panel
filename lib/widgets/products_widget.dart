@@ -4,8 +4,7 @@ import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/services/utils.dart';
 
 class ProductWidget extends StatefulWidget {
-  String imgPath;
-  ProductWidget({super.key, required this.imgPath});
+  ProductWidget({super.key});
 
   @override
   State<ProductWidget> createState() => _ProductWidgetState();
@@ -55,10 +54,7 @@ class _ProductWidgetState extends State<ProductWidget> {
         Positioned(
           top: 10,
           left: 5,
-          child: Image.asset(
-            widget.imgPath,
-            height: size.height / 7,
-          ),
+          child: SizedBox()
         ),
         Positioned(
           bottom: 20,

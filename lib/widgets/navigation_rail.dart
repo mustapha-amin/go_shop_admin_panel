@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../consts/nav_rail_items.dart';
 import '../screens/add_product.dart';
 import '../screens/customers.dart';
-import '../screens/dashboard.dart';
 import '../screens/orders_page.dart';
+import '../screens/dashboard.dart';
 import '../screens/product_categories.dart';
 
 class NavRailAndDashboard extends StatefulWidget {
@@ -53,7 +53,7 @@ class _NavRailAndDashboardState extends State<NavRailAndDashboard> {
           child: switch (_selectedTabIndex) {
             0 => const DashBoard(),
             1 => const CustomersScreen(),
-            2 => const ViewAllProducts(),
+            2 => const ProductCategories(),
             3 => const OrdersScreen(),
             _ => const AddProduct()
           },
