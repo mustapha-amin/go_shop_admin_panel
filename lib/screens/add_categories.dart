@@ -80,22 +80,25 @@ class _AddCategoryState extends State<AddCategory> {
                 ),
               ],
             ),
-            SizedBox(
-              width: Responsive.isMobile(context) ? 100.w : 40.w,
-              height: 10.h,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 13, 2, 40),
-                  foregroundColor: Colors.white,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: Responsive.isMobile(context) ? 100.w : 40.w,
+                height: 7.h,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 13, 2, 40),
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () async {
+                    await database.addCategory(
+                      custom.Category(
+                          name: controller.text, imgPath: _selectedImage!.path),
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Add category"),
                 ),
-                onPressed: () async {
-                  await database.addCategory(
-                    custom.Category(
-                        name: controller.text, imgPath: _selectedImage!.path),
-                  );
-                  Navigator.pop(context);
-                },
-                child: const Text("Add category"),
               ),
             )
           ],
