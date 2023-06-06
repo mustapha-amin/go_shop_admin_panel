@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/model/category.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 
+import '../consts/textstyle.dart';
+import '../global_products.dart';
 import '../services/utils.dart';
-import 'category_dropdown.dart';
 import 'custom_textfield.dart';
 
 class InputFields extends StatefulWidget {
-  TextEditingController? priceController, productNameController;
+  TextEditingController? priceController,
+      productNameController,
+      descriptionController;
+  Category? selectedCategory;
 
   InputFields({
     this.priceController,
     this.productNameController,
+    this.descriptionController,
+    this.selectedCategory,
     super.key,
   });
 
@@ -27,19 +36,20 @@ class _InputFieldsState extends State<InputFields> {
       children: [
         CustomTextField(
           hint: 'Product',
-          productNameController: widget.priceController!,
+          controller: widget.productNameController!,
           valueKey: 'product',
         ),
         addVerticalSpacing(10),
-        const CategoriesDropdown(),
-        addVerticalSpacing(10),
         CustomTextField(
           hint: 'Price',
-          productNameController: widget.productNameController!,
+          controller: widget.priceController!,
           valueKey: 'price',
           isPrice: true,
         ),
         addVerticalSpacing(10),
+        DescriptionField(
+          descriptionController: widget.descriptionController,
+        ),
       ],
     );
   }
@@ -58,7 +68,7 @@ class _DescriptionFieldState extends State<DescriptionField> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
-      width: size.width / 4,
+      width: 100.w,
       child: TextFormField(
         textCapitalization: TextCapitalization.sentences,
         key: const ValueKey('description'),

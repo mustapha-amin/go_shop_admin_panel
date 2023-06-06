@@ -38,7 +38,6 @@ class Header extends StatelessWidget {
                     )
                   ],
                 ),
-                const custom.SearchBar()
               ],
             )
           : Row(
@@ -52,15 +51,14 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 addHorizontalSpacing(size.width * .3),
-                const custom.SearchBar(),
                 Responsive.isTablet(context)
                     ? IconButton(
                         onPressed: () {
                           context.read<ThemeProvider>().toggleTheme();
                         },
                         icon: Utils(context).isDark
-                            ? Icon(Icons.light_mode)
-                            : Icon(Icons.dark_mode))
+                            ? const Icon(Icons.light_mode)
+                            : const Icon(Icons.dark_mode))
                     : SizedBox()
               ],
             ),

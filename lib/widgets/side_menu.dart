@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/model/category.dart';
 import 'package:go_shop_admin_panel/providers/theme_provider.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
+import 'package:go_shop_admin_panel/screens/add_categories.dart';
+import 'package:go_shop_admin_panel/screens/categories.dart';
 import 'package:go_shop_admin_panel/screens/orders_page.dart';
 import 'package:go_shop_admin_panel/screens/product_categories.dart';
+import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/services/theme_prefs.dart';
 import 'package:go_shop_admin_panel/widgets/drawer_listtile.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +23,11 @@ class SideMenu extends StatefulWidget {
 class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     bool switchValue = ThemeSettings.getTheme();
+    Database database = Database();
     return Drawer(
+      width: size.width * .80,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: ListView(
         children: [
@@ -54,6 +61,24 @@ class _SideMenuState extends State<SideMenu> {
               }));
             },
             icon: Icons.shopping_bag_rounded,
+          ),
+          DrawerListTile(
+            title: "View categories",
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ViewCategories();
+              }));
+            },
+            icon: Icons.category_rounded,
+          ),
+          DrawerListTile(
+            title: "Add category",
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return AddCategory();
+              }));
+            },
+            icon: Icons.category_outlined,
           ),
           Responsive.isPC(context)
               ? DrawerListTile(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
+import 'package:sizer/sizer.dart';
 
 import '../responsive.dart';
 import '../services/utils.dart';
@@ -8,12 +9,12 @@ class CustomTextField extends StatelessWidget {
   CustomTextField({
     super.key,
     required this.hint,
-    required this.productNameController,
+    required this.controller,
     required this.valueKey,
     this.isPrice = false,
   });
 
-  final TextEditingController productNameController;
+  final TextEditingController controller;
   final String valueKey;
   final String hint;
   bool? isPrice;
@@ -23,14 +24,14 @@ class CustomTextField extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
       width: (Responsive.isPC(context) || Responsive.isTablet(context))
-          ? size.width / 4
+          ? 20.w
           : size.width,
-      height: size.height / 12,
+      height: 12.h,
       child: TextFormField(
         textCapitalization: TextCapitalization.sentences,
         key: ValueKey(valueKey),
         textAlignVertical: TextAlignVertical.center,
-        controller: productNameController,
+        controller: controller,
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(

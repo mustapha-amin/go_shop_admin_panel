@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/global_products.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../model/category.dart';
@@ -25,11 +26,11 @@ class CategoryWidget extends StatelessWidget {
               width: size.width,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(category.imgPath!),
-                  filterQuality: FilterQuality.high,
-                ),
+                // image: DecorationImage(
+                //   fit: BoxFit.cover,
+                //   image: AssetImage(GlobalProducts.categoriesBasePath),
+                //   filterQuality: FilterQuality.high,
+                // ),
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
