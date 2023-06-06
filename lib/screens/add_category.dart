@@ -22,7 +22,6 @@ class AddCategory extends StatefulWidget {
 
 class _AddCategoryState extends State<AddCategory> {
   TextEditingController controller = TextEditingController();
-  Database database = Database();
   File? _selectedImage;
 
   Future<void> selectImage() async {
@@ -91,7 +90,7 @@ class _AddCategoryState extends State<AddCategory> {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () async {
-                    await database.addCategory(
+                    await Database.addCategory(
                       custom.Category(
                           name: controller.text, imgPath: _selectedImage!.path),
                     );

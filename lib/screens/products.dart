@@ -12,7 +12,6 @@ class Products extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Database database = Database();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -22,7 +21,7 @@ class Products extends StatelessWidget {
         centerTitle: true,
       ),
       body: StreamBuilder(
-        stream: database.getproducts(categoryId),
+        stream: Database.getproducts(categoryId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Product> products = snapshot.data!;

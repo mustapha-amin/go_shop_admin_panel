@@ -5,10 +5,10 @@ import 'package:go_shop_admin_panel/model/category.dart';
 import '../model/product.dart';
 
 class Database {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static const productCollection = 'category';
 
-  Future<void> addCategory(Category category) async {
+  static Future<void> addCategory(Category category) async {
     await firestore
         .collection('categories')
         .doc(category.name)
@@ -18,7 +18,7 @@ class Database {
         ));
   }
 
-  Future<void> addProduct(Product? product) async {
+  static Future<void> addProduct(Product? product) async {
     await firestore
         .collection('categories')
         .doc(product!.category)
@@ -31,7 +31,7 @@ class Database {
         ));
   }
 
-  Stream<List<Product>> getproducts(String? categoryId) {
+  static Stream<List<Product>>? getproducts(String? categoryId) {
     return firestore
         .collection('categories')
         .doc(categoryId)
@@ -41,7 +41,7 @@ class Database {
             snap.docs.map((e) => Product.fromJson(e.data())).toList());
   }
 
-  Stream<List<Category>> getCategories() {
+  static Stream<List<Category>>? getCategories() {
     return firestore.collection('categories').snapshots().map(
           (snap) => snap.docs.map((e) => Category.fromJson(e.data())).toList(),
         );

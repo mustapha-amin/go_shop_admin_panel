@@ -13,6 +13,7 @@ import 'package:go_shop_admin_panel/widgets/select_image_widget.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../global_products.dart';
@@ -61,6 +62,7 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var categories = Provider.of<List<custom.Category>>(context);
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -100,7 +102,7 @@ class _AddProductState extends State<AddProduct> {
                                     ? Colors.grey[700]
                                     : Colors.grey[300],
                                 value: category,
-                                items: GlobalProducts.categories
+                                items: categories
                                     .map((e) =>
                                         DropdownMenuItem<custom.Category>(
                                           value: e,
@@ -148,7 +150,7 @@ class _AddProductState extends State<AddProduct> {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {
-                            database.addProduct(
+                            Database.addProduct(
                               Product(
                                 name: productNameController.text,
                                 imgPath: selectedImage!.path,

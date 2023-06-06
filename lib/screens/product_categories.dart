@@ -4,6 +4,7 @@ import 'package:go_shop_admin_panel/model/category.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/widgets/category_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class ProductCategories extends StatefulWidget {
@@ -16,7 +17,7 @@ class ProductCategories extends StatefulWidget {
 class _ProductCategoriesState extends State<ProductCategories> {
   @override
   Widget build(BuildContext context) {
-    Database database = Database();
+    var categories = Provider.of<List<Category>>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -25,32 +26,27 @@ class _ProductCategoriesState extends State<ProductCategories> {
         ),
         centerTitle: true,
       ),
-      body: StreamBuilder(
-        stream: database.getCategories(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<Category> categories = snapshot.data!;
-            return GridView.builder(
-                itemCount: categories.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
-                ),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CategoryWidget(
-                      category: categories[index],
-                    ),
-                  );
-                });
-          } else if (!snapshot.hasData) {
-            return const Text("No category added yet");
-          }
-          return const Center(
-            child: Text("No category added yet"),
-          );
-        },
-      ),
+      body: categories.isEmpty
+          ? Center(
+              child: Text(
+                "No categories added",
+                style: kTextStyle(19, context),
+              ),
+            )
+          : GridView.builder(
+              itemCount: categories.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
+              ),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CategoryWidget(
+                    category: categories[index],
+                  ),
+                );
+              },
+            ),
     );
   }
 }
