@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/providers/theme_provider.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/screens/add_category.dart';
+import 'package:go_shop_admin_panel/screens/customers.dart';
 import 'package:go_shop_admin_panel/screens/product_categories.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/services/theme_prefs.dart';
@@ -37,7 +38,11 @@ class _SideMenuState extends State<SideMenu> {
           DrawerListTile(title: "Main", press: () {}, icon: Icons.home_filled),
           DrawerListTile(
             title: "Customers",
-            press: () {},
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const CustomersScreen();
+              }));
+            },
             icon: Icons.account_circle,
           ),
           DrawerListTile(

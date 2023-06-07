@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/model/category.dart';
+import 'package:go_shop_admin_panel/model/customer.dart';
 
 import '../model/product.dart';
 
@@ -45,5 +45,10 @@ class Database {
     return firestore.collection('categories').snapshots().map(
           (snap) => snap.docs.map((e) => Category.fromJson(e.data())).toList(),
         );
+  }
+
+  static Stream<List<Customer>> getCustomers() {
+    return firestore.collection('customers').snapshots().map(
+        (snap) => snap.docs.map((e) => Customer.fromJson(e.data())).toList());
   }
 }
