@@ -8,6 +8,7 @@ import 'package:go_shop_admin_panel/model/category.dart' as custom;
 import 'package:go_shop_admin_panel/model/product.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
+import 'package:go_shop_admin_panel/utils/snackbar.dart';
 import 'package:go_shop_admin_panel/widgets/input_fields.dart';
 import 'package:go_shop_admin_panel/widgets/select_image_widget.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
@@ -15,8 +16,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
-import '../global_products.dart';
 import '../services/utils.dart';
 
 class AddProduct extends StatefulWidget {
@@ -146,19 +145,30 @@ class _AddProductState extends State<AddProduct> {
                         height: 7.h,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 13, 2, 40),
+                            backgroundColor:
+                                const Color.fromARGB(255, 13, 2, 40),
                             foregroundColor: Colors.white,
                           ),
-                          onPressed: () {
-                            Database.addProduct(
-                              Product(
-                                name: productNameController.text,
-                                imgPath: selectedImage!.path,
-                                price: int.parse(priceController.text),
-                                category: category!.name,
-                              ),
-                            );
-                            Navigator.pop(context);
+                          onPressed: () async {
+                            priceController.text.isNotEmpty &&
+                                    descriptionController.text.isNotEmpty &&
+                                    productNameController.text.isNotEmpty &&
+                                    selectedImage != null
+                                ? {
+                                    await Database.addProduct(
+                                      context,
+                                      Product(
+                                        name: productNameController.text.trim(),
+                                        imgPath: selectedImage!.path,
+                                        price: double.parse(priceController.text
+                                            .replaceAll(',', '')),
+                                        category: category!.name,
+                                      ),
+                                    ),
+                                    Navigator.pop(context)
+                                  }
+                                : showSnackbar(
+                                    context, "Fill the required details");
                           },
                           child: const Text("Upload product"),
                         ),

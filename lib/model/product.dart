@@ -1,7 +1,7 @@
 class Product {
   String? name;
   String? imgPath;
-  int? price;
+  double? price;
   String? category;
 
   Product({
@@ -14,7 +14,7 @@ class Product {
   Map<String, dynamic> toJson(
     String? name,
     String? imgPath,
-    int? price,
+    double? price,
     String? category,
   ) {
     return {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 import '../responsive.dart';
@@ -8,14 +9,20 @@ import '../services/utils.dart';
 class CustomTextField extends StatelessWidget {
   CustomTextField({
     super.key,
+    required this.keyboardType,
+    this.onChanged,
     required this.hint,
     required this.controller,
     required this.valueKey,
     this.isPrice = false,
+    this.suffix,
   });
 
+  String? suffix;
+  final TextInputType keyboardType;
   final TextEditingController controller;
   final String valueKey;
+  Function(String)? onChanged;
   final String hint;
   bool? isPrice;
 
@@ -28,6 +35,7 @@ class CustomTextField extends StatelessWidget {
           : size.width,
       height: 12.h,
       child: TextFormField(
+        onChanged: onChanged,
         textCapitalization: TextCapitalization.sentences,
         key: ValueKey(valueKey),
         textAlignVertical: TextAlignVertical.center,
@@ -40,7 +48,14 @@ class CustomTextField extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
           ),
+          suffix: suffix != null ? Text(suffix!) : null,
+          suffixStyle: GoogleFonts.lato(
+            fontSize: 17.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+          ),
         ),
+        keyboardType: keyboardType,
         style: kTextStyle(15, context),
       ),
     );

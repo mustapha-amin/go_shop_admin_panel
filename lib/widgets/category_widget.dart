@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/global_products.dart';
 import 'package:go_shop_admin_panel/screens/products.dart';
@@ -8,7 +10,7 @@ import '../services/utils.dart';
 
 class CategoryWidget extends StatelessWidget {
   Category category;
-  CategoryWidget({super.key, required this.category});
+  CategoryWidget({required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +37,11 @@ class CategoryWidget extends StatelessWidget {
                 width: size.width,
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  // image: DecorationImage(
-                  //   fit: BoxFit.cover,
-                  //   image: AssetImage(GlobalProducts.categoriesBasePath),
-                  //   filterQuality: FilterQuality.high,
-                  // ),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(category.imgPath!),
+                    filterQuality: FilterQuality.high,
+                  ),
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),

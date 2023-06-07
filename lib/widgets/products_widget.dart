@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
-import 'package:go_shop_admin_panel/responsive.dart';
+import 'package:go_shop_admin_panel/model/product.dart';
+import 'package:go_shop_admin_panel/utils/extensions.dart';
 import 'package:go_shop_admin_panel/services/utils.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 
 class ProductWidget extends StatefulWidget {
-  ProductWidget({super.key});
+  Product? product;
+  ProductWidget({this.product, super.key});
 
   @override
   State<ProductWidget> createState() => _ProductWidgetState();
@@ -14,66 +18,42 @@ class _ProductWidgetState extends State<ProductWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        SizedBox(
-          width: size.width / 2,
-          height: size.height / 4,
-          child: Card(
-            elevation: 1,
-            color: Utils(context).isDark
-                ? Colors.grey[800]
-                : Colors.lightBlueAccent.withOpacity(0.1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+    return Container(
+      padding: const EdgeInsets.all(5),
+      height: 30.h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: Utils(context).isDark ? Colors.grey[800] : Colors.grey[300],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Expanded(
+            child: Container(
+              width: size.width,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(widget.product!.imgPath!),
+                  filterQuality: FilterQuality.high,
+                ),
+                borderRadius: BorderRadius.circular(6),
+              ),
             ),
           ),
-        ),
-        Positioned(
-          top: 10,
-          right: 5,
-          child: PopupMenuButton(
-            tooltip: "options",
-            splashRadius: 3,
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                  onTap: () {},
-                  value: 1,
-                  child: const Text("Edit"),
-                ),
-                PopupMenuItem(
-                  textStyle: const TextStyle(color: Colors.redAccent),
-                  onTap: () {},
-                  child: const Text("Delete"),
-                )
-              ];
-            },
+          Text(
+            widget.product!.name!,
+            style:
+                GoogleFonts.lato(fontSize: 15.sp, color: Utils(context).color),
           ),
-        ),
-        Positioned(
-          top: 10,
-          left: 5,
-          child: SizedBox()
-        ),
-        Positioned(
-          bottom: 20,
-          left: 10,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Product",
-                style: kTextStyle(20, context),
-              ),
-              Text(
-                "N10,000",
-                style: kTextStyle(15, context),
-              )
-            ],
+          Text(
+            widget.product!.price!.toMoney,
+            style:
+                GoogleFonts.lato(fontSize: 18.sp, color: Utils(context).color),
           ),
-        )
-      ],
+        ],
+      ),
     );
   }
 }

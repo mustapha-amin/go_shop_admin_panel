@@ -15,7 +15,7 @@ class Products extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Categories",
+          categoryId!,
           style: kTextStyle(18.sp, context),
         ),
         centerTitle: true,
@@ -34,15 +34,17 @@ class Products extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ProductWidget(),
+                        child: ProductWidget(
+                          product: products[index],
+                        ),
                       );
                     },
                   )
                 : const Center(
-                    child: Text("No catgory added yet"),
+                    child: Text("No product added yet"),
                   );
           }
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );

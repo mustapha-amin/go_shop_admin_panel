@@ -14,7 +14,7 @@ class Category {
   static Category fromJson(Map<String, dynamic> json) {
     return Category(
       name: json['name'] as String?,
-      imgPath: json['imgpath'] as String?,
+      imgPath: json['imgPath'] as String?,
     );
   }
 }

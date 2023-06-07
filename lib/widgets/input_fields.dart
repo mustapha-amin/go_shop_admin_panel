@@ -4,7 +4,7 @@ import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:go_shop_admin_panel/utils/extensions.dart';
 import '../consts/textstyle.dart';
 import '../global_products.dart';
 import '../services/utils.dart';
@@ -35,17 +35,33 @@ class _InputFieldsState extends State<InputFields> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextField(
+          keyboardType: TextInputType.text,
           hint: 'Product',
           controller: widget.productNameController!,
           valueKey: 'product',
         ),
         addVerticalSpacing(10),
         CustomTextField(
-          hint: 'Price',
-          controller: widget.priceController!,
-          valueKey: 'price',
-          isPrice: true,
-        ),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            hint: 'Price',
+            controller: widget.priceController!,
+            valueKey: 'price',
+            isPrice: true,
+            suffix: "NGN",
+            onChanged: (_) {
+              widget.priceController!.text.isNotEmpty
+                  ? setState(() {
+                      widget.priceController!.text = double.parse(
+                              widget.priceController!.text.replaceAll(',', ''))
+                          .toMoney;
+                      widget.priceController!.selection =
+                          TextSelection.fromPosition(
+                        TextPosition(
+                            offset: widget.priceController!.text.length),
+                      );
+                    })
+                  : null;
+            }),
         addVerticalSpacing(10),
         DescriptionField(
           descriptionController: widget.descriptionController,

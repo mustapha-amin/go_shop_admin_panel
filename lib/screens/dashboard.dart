@@ -6,7 +6,6 @@ import 'package:go_shop_admin_panel/utils/snackbar.dart';
 import 'package:go_shop_admin_panel/widgets/header.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
 import 'package:provider/provider.dart';
-import '../services/database.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({Key? key}) : super(key: key);
@@ -31,8 +30,8 @@ class _DashBoardState extends State<DashBoard> {
             ? FloatingActionButton(
                 onPressed: () {
                   categories.isEmpty
-                      ? showSnackbar(
-                          context, "You haven't added a category yet")
+                      ? showSnackbar(context,
+                          "You haven't added a category yet")
                       : Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {

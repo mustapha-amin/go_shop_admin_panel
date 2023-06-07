@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
+import 'package:go_shop_admin_panel/utils/snackbar.dart';
 import 'package:go_shop_admin_panel/widgets/custom_textfield.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
@@ -65,6 +66,7 @@ class _AddCategoryState extends State<AddCategory> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextField(
+                  keyboardType: TextInputType.text,
                   hint: 'Category name',
                   controller: controller,
                   valueKey: 'category',
@@ -90,11 +92,17 @@ class _AddCategoryState extends State<AddCategory> {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () async {
-                    await Database.addCategory(
-                      custom.Category(
-                          name: controller.text, imgPath: _selectedImage!.path),
-                    );
-                    Navigator.pop(context);
+                    controller.text.isNotEmpty && _selectedImage != null
+                        ? {
+                            await Database.addCategory(
+                              context,
+                              custom.Category(
+                                  name: controller.text.trim(),
+                                  imgPath: _selectedImage!.path),
+                            ),
+                            Navigator.pop(context),
+                          }
+                        : showSnackbar(context, "Fill the required details");
                   },
                   child: const Text("Add category"),
                 ),
