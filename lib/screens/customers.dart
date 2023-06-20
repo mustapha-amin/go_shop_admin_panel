@@ -42,7 +42,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         leading: const CircleAvatar(
                           backgroundColor: Colors.grey,
                           child: Icon(
-                            Icons.person,
+                            Icons.person_2_outlined,
                           ),
                         ),
                         title: Text(customers[index].name!),

@@ -8,6 +8,7 @@ import '../services/utils.dart';
 
 class CustomTextField extends StatelessWidget {
   CustomTextField({
+    this.width,
     super.key,
     required this.keyboardType,
     this.onChanged,
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.suffix,
   });
 
+  double? width;
   String? suffix;
   final TextInputType keyboardType;
   final TextEditingController controller;
@@ -30,9 +32,11 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
-      width: (Responsive.isPC(context) || Responsive.isTablet(context))
-          ? 20.w
-          : size.width,
+      width: width != null
+          ? width
+          : (Responsive.isPC(context) || Responsive.isTablet(context))
+              ? 20.w
+              : size.width,
       height: 12.h,
       child: TextFormField(
         onChanged: onChanged,
@@ -50,7 +54,7 @@ class CustomTextField extends StatelessWidget {
           ),
           suffix: suffix != null ? Text(suffix!) : null,
           suffixStyle: GoogleFonts.lato(
-            fontSize: 17.sp,
+            fontSize: 10.sp,
             fontWeight: FontWeight.bold,
             color: Colors.blue,
           ),

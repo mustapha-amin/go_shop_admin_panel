@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:go_shop_admin_panel/screens/add_category.dart';
+import 'package:sizer/sizer.dart';
 import '../consts/nav_rail_items.dart';
 import '../screens/add_product.dart';
 import '../screens/customers.dart';
 import '../screens/orders_page.dart';
 import '../screens/dashboard.dart';
 import '../screens/product_categories.dart';
-
 class NavRailAndDashboard extends StatefulWidget {
   const NavRailAndDashboard({super.key});
 
@@ -30,7 +30,7 @@ class _NavRailAndDashboardState extends State<NavRailAndDashboard> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Card(
-          elevation: 3,
+          elevation: 1,
           child: NavigationRail(
             labelType: NavigationRailLabelType.selected,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -45,7 +45,7 @@ class _NavRailAndDashboardState extends State<NavRailAndDashboard> {
         ),
         Container(
           height: size.height,
-          width: size.width * .001,
+          width: 5.w,
           color: Colors.grey[700],
         ),
         Expanded(
@@ -55,6 +55,7 @@ class _NavRailAndDashboardState extends State<NavRailAndDashboard> {
             1 => const CustomersScreen(),
             2 => const ProductCategories(),
             3 => const OrdersScreen(),
+            4 => const AddCategory(),
             _ => const AddProduct()
           },
         ),

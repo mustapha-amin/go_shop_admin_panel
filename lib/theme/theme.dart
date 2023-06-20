@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:go_shop_admin_panel/services/utils.dart';
 
 class MyTheme {
-  static ThemeData themeData(BuildContext context, bool isDark) {
+  static ThemeData themeData(BuildContext context) {
     return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: isDark ? Colors.grey[900] : Colors.grey[100],
+      scaffoldBackgroundColor: Colors.grey[100],
       primaryColor: Colors.green,
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-      listTileTheme: ListTileThemeData(
-        textColor: isDark ? Colors.white : Colors.black,
-        iconColor: isDark ? Colors.white : Colors.black,
-      ),
-      dividerTheme: DividerThemeData(
-        thickness: 1,
-        color: isDark ? Colors.grey : Colors.black,
-      ),
-      iconTheme: IconThemeData(
-        color: isDark ? Colors.white : Colors.black,
-      ),
       appBarTheme: AppBarTheme(
-        backgroundColor: isDark ? Colors.grey[900] : Colors.grey[100],
-        foregroundColor: Utils(context).color,
+        backgroundColor: Colors.grey[100],
+        foregroundColor: Colors.black,
       ),
       navigationRailTheme: NavigationRailThemeData(
         useIndicator: true,
@@ -33,10 +21,10 @@ class MyTheme {
         ),
         labelType: NavigationRailLabelType.all,
         selectedLabelTextStyle: TextStyle(
-          color: Utils(context).color,
+          color: Colors.black,
         ),
         unselectedLabelTextStyle: TextStyle(
-          color: Utils(context).isDark ? Colors.grey : Colors.grey[700],
+          color: Colors.grey[700],
         ),
         elevation: 3,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,

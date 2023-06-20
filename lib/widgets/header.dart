@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/controllers/menu_controller.dart';
-import 'package:go_shop_admin_panel/providers/theme_provider.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
-import 'package:go_shop_admin_panel/services/theme_prefs.dart';
-import 'package:go_shop_admin_panel/services/utils.dart';
-import 'package:go_shop_admin_panel/widgets/search_bar.dart' as custom;
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class Header extends StatelessWidget {
@@ -51,15 +46,7 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 addHorizontalSpacing(size.width * .3),
-                Responsive.isTablet(context)
-                    ? IconButton(
-                        onPressed: () {
-                          context.read<ThemeProvider>().toggleTheme();
-                        },
-                        icon: Utils(context).isDark
-                            ? const Icon(Icons.light_mode)
-                            : const Icon(Icons.dark_mode))
-                    : SizedBox()
+                
               ],
             ),
     );

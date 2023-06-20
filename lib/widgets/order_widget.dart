@@ -18,7 +18,7 @@ class OrderWidget extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Utils(context).isDark ? Colors.grey[800] : Colors.white10,
+            color:   Colors.white10,
           ),
           child: ListTile(
             title: Text(order.name!),

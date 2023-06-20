@@ -47,6 +47,8 @@ dependencies:
   firebase_storage: ^11.2.2
   sizer: ^2.0.15
   intl:
+  flutter_spinkit: ^5.2.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

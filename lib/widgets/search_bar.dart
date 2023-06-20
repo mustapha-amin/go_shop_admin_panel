@@ -25,7 +25,7 @@ class SearchBar extends StatelessWidget {
               borderSide: BorderSide(color: Colors.grey),
             ),
             suffixIcon: Icon(Icons.search),
-            fillColor: Utils(context).isDark ? Colors.grey[600] : Colors.white,
+            fillColor: Colors.white,
             hintText: "Search",
           ),
         ),

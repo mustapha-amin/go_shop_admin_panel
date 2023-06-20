@@ -5,6 +5,5 @@ import 'package:google_fonts/google_fonts.dart';
 kTextStyle(double size, BuildContext context){
   return GoogleFonts.lato(
     fontSize: size,
-    color: Utils(context).color,
   );
 }

@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/model/category.dart';
 import 'package:go_shop_admin_panel/model/customer.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '../model/featured_product.dart';
 import '../model/product.dart';
 import '/utils/snackbar.dart';
 
@@ -14,8 +14,7 @@ class Database {
   static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   static const productCollection = 'category';
 
-  static Future<void> addCategory(
-      BuildContext context, Category category) async {
+  Future<void> addCategory(BuildContext context, Category category) async {
     try {
       final path =
           'categories/${category.name}/${category.name}.${category.imgPath!.split('.').last}';
@@ -31,13 +30,15 @@ class Database {
             imgUrl,
           ));
       // ignore: use_build_context_synchronously
+      Navigator.pop(context);
       showSnackbar(context, "Product category added");
     } catch (e) {
+      Navigator.pop(context);
       showSnackbar(context, e.toString());
     }
   }
 
-  static Future<void> addProduct(BuildContext context, Product? product) async {
+  Future<void> addProduct(BuildContext context, Product? product) async {
     try {
       final path =
           'products/${product!.category}/${product.name}.${product.imgPath!.split('.').last}';
@@ -45,32 +46,56 @@ class Database {
       final ref = firebaseStorage.ref().child(path);
       await ref.putFile(file);
       final imgUrl = await ref.getDownloadURL();
-      await firestore
-          .collection('categories')
-          .doc(product.category)
-          .collection('products')
-          .add(product.toJson(
+      await firestore.collection('products').doc(product.id).set(product.toJson(
+            product.id,
             product.name,
             imgUrl,
             product.price,
             product.category,
+            product.description,
           ));
+      Navigator.pop(context);
       // ignore: use_build_context_synchronously
       showSnackbar(context, "Product added");
     } catch (e) {
       log(e.toString());
       Navigator.pop(context);
+      showSnackbar(context, e.toString());
     }
   }
 
   static Stream<List<Product>>? getproducts(String? categoryId) {
     return firestore
-        .collection('categories')
-        .doc(categoryId)
         .collection('products')
-        .snapshots()
+        .where('category', isEqualTo: categoryId)
+        .get()
+        .asStream()
         .map((snap) =>
             snap.docs.map((e) => Product.fromJson(e.data())).toList());
+  }
+
+  Future<void> deleteProduct(Product product) async {
+    try {
+      await firestore.collection('products').doc(product.id).delete();
+      final path = 'products/${product.category}/${product.name}.png}';
+      final ref = firebaseStorage.ref().child(path);
+      await ref.delete();
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> featureProduct(FeaturedProduct featuredProduct) async {
+    firestore.collection('featured').doc(featuredProduct.product!.id).set(
+        featuredProduct.toJson(
+            featuredProduct.product, featuredProduct.message));
+  }
+
+  Stream<List<FeaturedProduct>> getFeaturedProducts() {
+    return firestore
+        .collection('featured')
+        .snapshots()
+        .map((snap) => snap.docs.map((e) => FeaturedProduct.fromJson(e.data())).toList());
   }
 
   static Stream<List<Category>>? getCategories() {

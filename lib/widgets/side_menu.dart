@@ -3,6 +3,7 @@ import 'package:go_shop_admin_panel/providers/theme_provider.dart';
 import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/screens/add_category.dart';
 import 'package:go_shop_admin_panel/screens/customers.dart';
+import 'package:go_shop_admin_panel/screens/featured.dart';
 import 'package:go_shop_admin_panel/screens/product_categories.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/services/theme_prefs.dart';
@@ -69,10 +70,19 @@ class _SideMenuState extends State<SideMenu> {
             title: "Add category",
             press: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AddCategory();
+                return const AddCategory();
               }));
             },
             icon: Icons.category_outlined,
+          ),
+          DrawerListTile(
+            title: "Featured",
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const FeaturedProducts();
+              }));
+            },
+            icon: Icons.star,
           ),
           Responsive.isPC(context)
               ? DrawerListTile(
@@ -81,20 +91,6 @@ class _SideMenuState extends State<SideMenu> {
                   icon: Icons.add,
                 )
               : const SizedBox(),
-          ListTile(
-            leading: Icon(switchValue ? Icons.dark_mode : Icons.light_mode),
-            title: Text(
-              switchValue ? "Dark mode" : "light mode",
-              style: kTextStyle(17, context),
-            ),
-            trailing: Switch(
-                value: switchValue,
-                onChanged: (val) {
-                  setState(() {
-                    context.read<ThemeProvider>().toggleTheme();
-                  });
-                }),
-          )
         ],
       ),
     );

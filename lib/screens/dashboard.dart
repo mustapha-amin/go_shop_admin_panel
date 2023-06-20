@@ -22,7 +22,7 @@ class _DashBoardState extends State<DashBoard> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Header(),
+            const Header(),
             addVerticalSpacing(20),
           ],
         ),

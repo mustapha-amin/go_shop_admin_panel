@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:go_shop_admin_panel/consts/enums.dart';
 import 'package:go_shop_admin_panel/model/category.dart' as custom;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,14 @@ import 'package:flutter/services.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/utils/snackbar.dart';
 import 'package:go_shop_admin_panel/widgets/custom_textfield.dart';
+import 'package:go_shop_admin_panel/widgets/loading_widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../consts/textstyle.dart';
 import '../responsive.dart';
+import '../services/utils.dart';
 import '../widgets/select_image_widget.dart';
 import '../widgets/spacings.dart';
 
@@ -24,6 +29,7 @@ class AddCategory extends StatefulWidget {
 class _AddCategoryState extends State<AddCategory> {
   TextEditingController controller = TextEditingController();
   File? _selectedImage;
+  bool isLoading = false;
 
   Future<void> selectImage() async {
     try {
@@ -51,66 +57,114 @@ class _AddCategoryState extends State<AddCategory> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text("Add a category"),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomTextField(
-                  keyboardType: TextInputType.text,
-                  hint: 'Category name',
-                  controller: controller,
-                  valueKey: 'category',
-                ),
-                addVerticalSpacing(20),
-                SelectImage(
-                  selectedImage: _selectedImage,
-                  onSelected: selectImage,
-                  onCancelled: () => setState(() {
-                    _selectedImage = null;
-                  }),
-                ),
-              ],
+    return isLoading
+        ? const LoadingWidget()
+        : Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: const Text("Add a category"),
+              centerTitle: true,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: Responsive.isMobile(context) ? 100.w : 40.w,
-                height: 7.h,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 13, 2, 40),
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () async {
-                    controller.text.isNotEmpty && _selectedImage != null
-                        ? {
-                            await Database.addCategory(
-                              context,
-                              custom.Category(
-                                  name: controller.text.trim(),
-                                  imgPath: _selectedImage!.path),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextField(
+                        keyboardType: TextInputType.text,
+                        hint: 'Category name',
+                        controller: controller,
+                        valueKey: 'category',
+                      ),
+                      addVerticalSpacing(20),
+                      InkWell(
+                        onTap: selectImage,
+                        child: Stack(
+                          children: [
+                            Container(
+                              width:
+                                  Responsive.isMobile(context) ? 100.w : 33.w,
+                              height:
+                                  Responsive.isMobile(context) ? 45.h : 50.h,
+                              decoration: BoxDecoration(
+                                color:  Colors.grey[300],
+                                border: Border.all(
+                                  width: 0.2,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: _selectedImage == null
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons
+                                              .photo_size_select_actual_outlined,
+                                          size: 10.w,
+                                          color:  Colors.grey[700],
+                                        ),
+                                        Text(
+                                          "Select a photo",
+                                          style: kTextStyle(15, context),
+                                        ),
+                                      ],
+                                    )
+                                  : Image.file(_selectedImage!),
                             ),
-                            Navigator.pop(context),
-                          }
-                        : showSnackbar(context, "Fill the required details");
-                  },
-                  child: const Text("Add category"),
-                ),
+                            _selectedImage != null
+                                ? IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedImage = null;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.clear_rounded,
+                                    ),
+                                  )
+                                : const SizedBox()
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: Responsive.isMobile(context) ? 100.w : 40.w,
+                      height: 7.h,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 13, 2, 40),
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () async {
+                          controller.text.isNotEmpty && _selectedImage != null
+                              ? {
+                                  setState(() {
+                                    isLoading = true;
+                                  }),
+                                  await Database().addCategory(
+                                    context,
+                                    custom.Category(
+                                        name: controller.text.trim(),
+                                        imgPath: _selectedImage!.path),
+                                  ),
+                                }
+                              : showSnackbar(
+                                  context, "Fill the required details");
+                        },
+                        child: const Text("Add category"),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

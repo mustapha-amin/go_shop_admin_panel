@@ -22,6 +22,16 @@ List<NavigationRailDestination> navRailItems = const [
     indicatorColor: Colors.black,
   ),
   NavigationRailDestination(
+    icon: Icon(Icons.category_outlined),
+    label: Text("Add category"),
+    indicatorColor: Colors.black,
+  ),
+  NavigationRailDestination(
+    icon: Icon(Icons.star),
+    label: Text("Feature a product"),
+    indicatorColor: Colors.black,
+  ),
+  NavigationRailDestination(
     icon: Icon(Icons.add),
     label: Text("Add products"),
     indicatorColor: Colors.black,

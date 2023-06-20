@@ -13,7 +13,8 @@ import 'custom_textfield.dart';
 class InputFields extends StatefulWidget {
   TextEditingController? priceController,
       productNameController,
-      descriptionController;
+      descriptionController,
+      quantityController;
   Category? selectedCategory;
 
   InputFields({
@@ -21,6 +22,7 @@ class InputFields extends StatefulWidget {
     this.productNameController,
     this.descriptionController,
     this.selectedCategory,
+    this.quantityController,
     super.key,
   });
 
@@ -41,27 +43,43 @@ class _InputFieldsState extends State<InputFields> {
           valueKey: 'product',
         ),
         addVerticalSpacing(10),
-        CustomTextField(
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            hint: 'Price',
-            controller: widget.priceController!,
-            valueKey: 'price',
-            isPrice: true,
-            suffix: "NGN",
-            onChanged: (_) {
-              widget.priceController!.text.isNotEmpty
-                  ? setState(() {
-                      widget.priceController!.text = double.parse(
-                              widget.priceController!.text.replaceAll(',', ''))
-                          .toMoney;
-                      widget.priceController!.selection =
-                          TextSelection.fromPosition(
-                        TextPosition(
-                            offset: widget.priceController!.text.length),
-                      );
-                    })
-                  : null;
-            }),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomTextField(
+              width: 44.w,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              hint: 'Price',
+              controller: widget.priceController!,
+              valueKey: 'price',
+              isPrice: true,
+              suffix: "NGN",
+              onChanged: (_) {
+                widget.priceController!.text.isNotEmpty
+                    ? setState(() {
+                        widget.priceController!.text = double.parse(widget
+                                .priceController!.text
+                                .replaceAll(',', ''))
+                            .toMoney;
+                        widget.priceController!.selection =
+                            TextSelection.fromPosition(
+                          TextPosition(
+                              offset: widget.priceController!.text.length),
+                        );
+                      })
+                    : null;
+              },
+            ),
+            CustomTextField(
+              width: 44.w,
+              keyboardType: TextInputType.number,
+              hint: 'quantity',
+              controller: widget.quantityController!,
+              valueKey: 'quantity',
+            ),
+          ],
+        ),
         addVerticalSpacing(10),
         DescriptionField(
           descriptionController: widget.descriptionController,
@@ -99,10 +117,8 @@ class _DescriptionFieldState extends State<DescriptionField> {
           ),
         ),
         maxLines: 3,
-        style: TextStyle(
-          color: Utils(context).color,
-        ),
       ),
     );
   }
 }
+
