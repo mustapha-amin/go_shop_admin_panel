@@ -12,7 +12,8 @@ import 'shimmer_widget.dart';
 
 class ProductWidget extends StatefulWidget {
   Product? product;
-  ProductWidget({this.product, super.key});
+  bool? featured;
+  ProductWidget({this.product, this.featured, super.key});
 
   @override
   State<ProductWidget> createState() => _ProductWidgetState();
@@ -45,56 +46,93 @@ class _ProductWidgetState extends State<ProductWidget> {
                 Icons.more_vert_sharp,
               ),
               itemBuilder: (context) {
-                return [
-                  const PopupMenuItem(
-                    child: Text("Edit"),
-                  ),
-                  PopupMenuItem(
-                    child: const Text("Delete"),
-                    onTap: () {
-                      log(widget.product!.id.toString());
-                      Future.delayed(Duration.zero, () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Delete product"),
-                                content: const Text(
-                                    "Do you want to delete this product?"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Database().deleteProduct(widget.product!);
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("Yes"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("No"),
-                                  ),
-                                ],
-                              );
+                return widget.featured!
+                    ? [
+                        PopupMenuItem(
+                          child: const Text("Delete"),
+                          onTap: () {
+                            log(widget.product!.id.toString());
+                            Future.delayed(Duration.zero, () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Delete product"),
+                                      content: const Text(
+                                          "Do you want to delete this product?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () async {
+                                            Database().removeFromFeatured(
+                                                widget.product!.id);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("Yes"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("No"),
+                                        ),
+                                      ],
+                                    );
+                                  });
                             });
-                      });
-                    },
-                  ),
-                  PopupMenuItem(
-                    child: const Text("Feature"),
-                    onTap: () {
-                      Future.delayed(Duration.zero, () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return Feature(
-                            product: widget.product,
-                          );
-                        }));
-                      });
-                    },
-                  )
-                ];
+                          },
+                        ),
+                      ]
+                    : [
+                        const PopupMenuItem(
+                          child: Text("Edit"),
+                        ),
+                        PopupMenuItem(
+                          child: const Text("Delete"),
+                          onTap: () {
+                            log(widget.product!.id.toString());
+                            Future.delayed(Duration.zero, () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Delete product"),
+                                      content: const Text(
+                                          "Do you want to delete this product?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Database()
+                                                .deleteProduct(widget.product!);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("Yes"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("No"),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            });
+                          },
+                        ),
+                        PopupMenuItem(
+                          child: const Text("Feature"),
+                          onTap: () {
+                            Future.delayed(Duration.zero, () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return Feature(
+                                  product: widget.product,
+                                );
+                              }));
+                            });
+                          },
+                        )
+                      ];
               },
             ),
           ),

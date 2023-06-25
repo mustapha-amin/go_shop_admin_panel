@@ -93,6 +93,10 @@ class Database {
         snap.docs.map((e) => FeaturedProduct.fromJson(e.data())).toList());
   }
 
+  Future<void> removeFromFeatured(String? id) async {
+    await firestore.collection('featured').doc(id).delete();
+  }
+
   static Stream<List<Category>>? getCategories() {
     return firestore.collection('categories').snapshots().map(
           (snap) => snap.docs.map((e) => Category.fromJson(e.data())).toList(),

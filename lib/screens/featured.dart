@@ -49,6 +49,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
                   padding: const EdgeInsets.all(8.0),
                   child: ProductWidget(
                     product: snapshot.data![index].product,
+                    featured: true,
                   ),
                 );
               },

@@ -35,6 +35,7 @@ class Products extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: ProductWidget(
                           product: products[index],
+                          featured: false,
                         ),
                       );
                     },

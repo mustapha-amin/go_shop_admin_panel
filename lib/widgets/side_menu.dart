@@ -9,7 +9,6 @@ import 'package:go_shop_admin_panel/screens/product_categories.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/services/theme_prefs.dart';
 import 'package:go_shop_admin_panel/widgets/drawer_listtile.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../screens/orders_page.dart';

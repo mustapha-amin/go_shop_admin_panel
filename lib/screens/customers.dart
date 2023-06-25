@@ -46,19 +46,19 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     ),
                   )
                 : ListView.builder(
-                  itemCount: customers.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: const CircleAvatar(
-                        backgroundColor: Colors.grey,
-                        child: Icon(
-                          Icons.person_2_outlined,
+                    itemCount: customers.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey[100],
+                          child: Icon(
+                            Icons.person_2_outlined,
+                          ),
                         ),
-                      ),
-                      title: Text(customers[index].name!),
-                    );
-                  },
-                );
+                        title: Text(customers[index].name!),
+                      );
+                    },
+                  );
           } else {
             return const Center(
               child: CircularProgressIndicator(),
