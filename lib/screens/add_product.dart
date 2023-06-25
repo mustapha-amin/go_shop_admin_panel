@@ -6,11 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/model/category.dart' as custom;
 import 'package:go_shop_admin_panel/model/product.dart';
-import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/utils/snackbar.dart';
 import 'package:go_shop_admin_panel/widgets/input_fields.dart';
 import 'package:go_shop_admin_panel/widgets/select_image_widget.dart';
+import 'package:go_shop_admin_panel/widgets/side_menu.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,7 +33,6 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController quantityController = TextEditingController();
   custom.Category? category;
   final _formKey = GlobalKey<FormState>();
-  Uint8List? webImage = Uint8List(8);
   File? selectedImage;
   bool isLoading = false;
 
@@ -41,21 +40,10 @@ class _AddProductState extends State<AddProduct> {
     try {
       final ImagePicker imagePicker = ImagePicker();
       XFile? image = await imagePicker.pickImage(source: ImageSource.gallery);
-
-      if (!kIsWeb) {
-        if (image != null) {
-          setState(() {
-            selectedImage = File(image.path);
-          });
-        }
-      } else if (kIsWeb) {
-        if (image != null) {
-          var img = await image.readAsBytes();
-          setState(() {
-            webImage = img;
-            selectedImage = File("a");
-          });
-        }
+      if (image != null) {
+        setState(() {
+          selectedImage = File(image.path);
+        });
       }
     } on PlatformException catch (e) {
       log(e.message!);
@@ -69,12 +57,24 @@ class _AddProductState extends State<AddProduct> {
     return isLoading
         ? const LoadingWidget()
         : Scaffold(
-            appBar: AppBar(),
-            body: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Responsive.isMobile(context)
-                    ? Padding(
+            drawer: SideMenu(),
+            appBar: AppBar(
+              title: Text("Add product"),
+              leading: Builder(builder: (BuildContext context) {
+                return IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    });
+              }),
+            ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,9 +84,7 @@ class _AddProductState extends State<AddProduct> {
                               children: [
                                 Container(
                                   height: 10.h,
-                                  width: Responsive.isMobile(context)
-                                      ? 100.w
-                                      : 20.w,
+                                  width: 100.w,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     border: Border.all(
@@ -155,12 +153,8 @@ class _AddProductState extends State<AddProduct> {
                                   child: Stack(
                                     children: [
                                       Container(
-                                          width: Responsive.isMobile(context)
-                                              ? 100.w
-                                              : 33.w,
-                                          height: Responsive.isMobile(context)
-                                              ? 30.h
-                                              : size.height / 1.5,
+                                          width: 100.w,
+                                          height: 30.h,
                                           decoration: BoxDecoration(
                                             color: Colors.grey[300],
                                             border: Border.all(
@@ -206,161 +200,49 @@ class _AddProductState extends State<AddProduct> {
                               ],
                             ),
                             addVerticalSpacing(10),
-                            SizedBox(
-                              width: 100.w,
-                              height: 7.h,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 13, 2, 40),
-                                  foregroundColor: Colors.white,
-                                ),
-                                onPressed: () async {
-                                  priceController.text.isNotEmpty &&
-                                          descriptionController
-                                              .text.isNotEmpty &&
-                                          productNameController
-                                              .text.isNotEmpty &&
-                                          quantityController.text.isNotEmpty &&
-                                          selectedImage != null
-                                      ? {
-                                          setState(() {
-                                            isLoading = true;
-                                          }),
-                                          await Database().addProduct(
-                                            context,
-                                            Product(
-                                                name: productNameController.text
-                                                    .trim(),
-                                                imgPath: selectedImage!.path,
-                                                price: double.parse(
-                                                    priceController.text
-                                                        .replaceAll(',', '')),
-                                                category: category!.name,
-                                                description:
-                                                    descriptionController.text),
-                                          ),
-                                        }
-                                      : showSnackbar(
-                                          context, "Fill the required details");
-                                },
-                                child: const Text("Upload product"),
-                              ),
-                            ),
-                            addVerticalSpacing(10),
                           ],
                         ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              InputFields(
-                                priceController: priceController,
-                                productNameController: productNameController,
-                                descriptionController: descriptionController,
-                                selectedCategory: category,
-                                quantityController: quantityController,
-                              ),
-                              addVerticalSpacing(20),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    fixedSize:
-                                        Size(size.width / 4, size.height / 10),
-                                    backgroundColor:
-                                        const Color.fromARGB(255, 13, 2, 40)),
-                                onPressed: () async {
-                                  priceController.text.isNotEmpty &&
-                                          descriptionController
-                                              .text.isNotEmpty &&
-                                          productNameController
-                                              .text.isNotEmpty &&
-                                          quantityController.text.isNotEmpty &&
-                                          selectedImage != null
-                                      ? {
-                                          setState(() {
-                                            isLoading = true;
-                                          }),
-                                          await Database().addProduct(
-                                            context,
-                                            Product(
-                                              name: productNameController.text
-                                                  .trim(),
-                                              imgPath: selectedImage!.path,
-                                              price: double.parse(
-                                                  priceController.text
-                                                      .replaceAll(',', '')),
-                                              category: category!.name,
-                                            ),
-                                          ),
-                                        }
-                                      : showSnackbar(
-                                          context, "Fill the required details");
-                                },
-                                child: Text(
-                                  "Add",
-                                  style: kTextStyle(20, context),
-                                ),
-                              )
-                            ],
-                          ),
-                          InkWell(
-                            onTap: selectImage,
-                            child: Stack(
-                              children: [
-                                Container(
-                                    width: Responsive.isMobile(context)
-                                        ? 100.w
-                                        : 33.w,
-                                    height: Responsive.isMobile(context)
-                                        ? 45.h
-                                        : size.height / 1.5,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      border: Border.all(
-                                        width: 0.2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: selectedImage == null
-                                        ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons
-                                                    .photo_size_select_actual_outlined,
-                                                size: size.width / 10,
-                                                color: Colors.grey[700],
-                                              ),
-                                              Text(
-                                                "Select a photo",
-                                                style: kTextStyle(15, context),
-                                              ),
-                                            ],
-                                          )
-                                        : Image.asset(selectedImage!.path)),
-                                selectedImage != null
-                                    ? IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            selectedImage = null;
-                                          });
-                                        },
-                                        icon: Icon(
-                                          Icons.clear_rounded,
-                                        ),
-                                      )
-                                    : const SizedBox()
-                              ],
-                            ),
-                          )
-                        ],
                       ),
-              ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 90.w,
+                  height: 9.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 13, 2, 40),
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      priceController.text.isNotEmpty &&
+                              descriptionController.text.isNotEmpty &&
+                              productNameController.text.isNotEmpty &&
+                              quantityController.text.isNotEmpty &&
+                              selectedImage != null
+                          ? {
+                              setState(() {
+                                isLoading = true;
+                              }),
+                              await Database().addProduct(
+                                context,
+                                Product(
+                                  name: productNameController.text.trim(),
+                                  imgPath: selectedImage!.path,
+                                  price: double.parse(
+                                      priceController.text.replaceAll(',', '')),
+                                  category: category!.name,
+                                  description: descriptionController.text,
+                                ),
+                              ),
+                            }
+                          : showSnackbar(context, "Fill the required details");
+                    },
+                    child: const Text("Upload product"),
+                  ),
+                ),
+                addVerticalSpacing(10),
+              ],
             ),
           );
   }

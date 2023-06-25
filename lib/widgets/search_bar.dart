@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/services/utils.dart';
 
 class SearchBar extends StatelessWidget {

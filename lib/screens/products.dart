@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
-import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/widgets/products_widget.dart';
 import 'package:sizer/sizer.dart';
@@ -29,7 +28,7 @@ class Products extends StatelessWidget {
                 ? GridView.builder(
                     itemCount: products.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
+                      crossAxisCount: 2 ,
                     ),
                     itemBuilder: (context, index) {
                       return Padding(

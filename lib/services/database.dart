@@ -46,14 +46,11 @@ class Database {
       final ref = firebaseStorage.ref().child(path);
       await ref.putFile(file);
       final imgUrl = await ref.getDownloadURL();
-      await firestore.collection('products').doc(product.id).set(product.toJson(
-            product.id,
-            product.name,
-            imgUrl,
-            product.price,
-            product.category,
-            product.description,
-          ));
+      product.imgPath = imgUrl;
+      await firestore
+          .collection('products')
+          .doc(product.id)
+          .set(product.toJson());
       Navigator.pop(context);
       // ignore: use_build_context_synchronously
       showSnackbar(context, "Product added");
@@ -92,10 +89,8 @@ class Database {
   }
 
   Stream<List<FeaturedProduct>> getFeaturedProducts() {
-    return firestore
-        .collection('featured')
-        .snapshots()
-        .map((snap) => snap.docs.map((e) => FeaturedProduct.fromJson(e.data())).toList());
+    return firestore.collection('featured').snapshots().map((snap) =>
+        snap.docs.map((e) => FeaturedProduct.fromJson(e.data())).toList());
   }
 
   static Stream<List<Category>>? getCategories() {

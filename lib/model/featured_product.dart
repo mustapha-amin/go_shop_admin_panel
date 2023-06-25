@@ -17,12 +17,6 @@ class FeaturedProduct {
   Map<String, dynamic> toJson(Product? product, String? message) {
     return {
       'product': product!.toJson(
-        product.id,
-        product.name,
-        product.imgPath,
-        product.price,
-        product.category,
-        product.description,
       ),
       'message': message,
     };

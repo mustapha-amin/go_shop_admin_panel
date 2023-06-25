@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
-
-import '../responsive.dart';
 import '../services/utils.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -32,11 +30,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
-      width: width != null
-          ? width
-          : (Responsive.isPC(context) || Responsive.isTablet(context))
-              ? 20.w
-              : size.width,
+      width: width ?? 100.w,
       height: 12.h,
       child: TextFormField(
         onChanged: onChanged,

@@ -18,12 +18,6 @@ class Product {
   }) : id = id ?? const Uuid().v4();
 
   Map<String, dynamic> toJson(
-    String? id,
-    String? name,
-    String? imgPath,
-    double? price,
-    String? category,
-    String? description,
   ) {
     return {
       'id': id,

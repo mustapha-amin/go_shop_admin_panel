@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_shop_admin_panel/model/category.dart';
-import 'package:go_shop_admin_panel/responsive.dart';
+import 'package:go_shop_admin_panel/model/category.dart' as custom;
 import 'package:go_shop_admin_panel/screens/add_product.dart';
 import 'package:go_shop_admin_panel/utils/snackbar.dart';
 import 'package:go_shop_admin_panel/widgets/header.dart';
+import 'package:go_shop_admin_panel/widgets/side_menu.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
 import 'package:provider/provider.dart';
 
@@ -16,34 +17,40 @@ class DashBoard extends StatefulWidget {
 class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
-    var categories = Provider.of<List<Category>>(context);
-    return SafeArea(
-      child: Scaffold(
+    var categories = Provider.of<List<custom.Category>>(context);
+    return Scaffold(
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+        ),
+        drawer: const SideMenu(),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Header(),
             addVerticalSpacing(20),
           ],
         ),
-        floatingActionButton: Responsive.isMobile(context)
-            ? FloatingActionButton(
-                onPressed: () {
-                  categories.isEmpty
-                      ? showSnackbar(context,
-                          "You haven't added a category yet")
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return const AddProduct();
-                          }),
-                        );
-                },
-                tooltip: 'Add product',
-                child: const Icon(Icons.add),
-              )
-            : null,
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            categories.isEmpty
+                ? showSnackbar(context, "You haven't added a category yet")
+                : Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return const AddProduct();
+                    }),
+                  );
+          },
+          tooltip: 'Add product',
+          child: const Icon(Icons.add),
+        ));
   }
 }

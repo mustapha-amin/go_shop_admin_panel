@@ -8,25 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '/services/theme_prefs.dart';
 import '/theme/theme.dart';
-import '/providers/theme_provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ThemeSettings().init();
   await Firebase.initializeApp(
-    // options: const FirebaseOptions(
-    //   apiKey: "AIzaSyD5zcoRfa-Cy8IrM4M5mijPchvP-PqIdK4",
-    //   authDomain: "go-shop-3d5ba.firebaseapp.com",
-    //   projectId: "go-shop-3d5ba",
-    //   storageBucket: "go-shop-3d5ba.appspot.com",
-    //   messagingSenderId: "504738923921",
-    //   appId: "1:504738923921:web:93feaa5878475bac4dc630",
-    //   measurementId: "G-87M2NPT5RT",
-    // ),
-  );
+      );
   runApp(MultiProvider(
     providers: [
-      
       ChangeNotifierProvider(
         create: (_) => MenuContoller(),
       ),

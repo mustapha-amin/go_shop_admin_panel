@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/model/category.dart';
-import 'package:go_shop_admin_panel/responsive.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';

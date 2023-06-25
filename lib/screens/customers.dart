@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/model/customer.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
+import 'package:go_shop_admin_panel/widgets/side_menu.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomersScreen extends StatefulWidget {
@@ -16,11 +17,20 @@ class _CustomersScreenState extends State<CustomersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const SideMenu(),
       appBar: AppBar(
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              });
+        }),
         title: Text(
           "Customers",
-          style: kTextStyle(18.sp, context),
+          style: kTextStyle(18, context),
         ),
+        foregroundColor: Colors.black,
         centerTitle: true,
       ),
       body: StreamBuilder(
@@ -36,19 +46,19 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: customers.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: const CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          child: Icon(
-                            Icons.person_2_outlined,
-                          ),
+                  itemCount: customers.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: const CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.person_2_outlined,
                         ),
-                        title: Text(customers[index].name!),
-                      );
-                    },
-                  );
+                      ),
+                      title: Text(customers[index].name!),
+                    );
+                  },
+                );
           } else {
             return const Center(
               child: CircularProgressIndicator(),

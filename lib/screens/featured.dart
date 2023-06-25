@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/model/featured_product.dart';
 import 'package:go_shop_admin_panel/widgets/products_widget.dart';
+import 'package:go_shop_admin_panel/widgets/side_menu.dart';
 
 class FeaturedProducts extends StatefulWidget {
   const FeaturedProducts({super.key});
@@ -22,7 +23,15 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SideMenu(),
       appBar: AppBar(
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              });
+        }),
         title: const Text("Featured"),
         centerTitle: true,
       ),
@@ -36,8 +45,11 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
                 crossAxisCount: 2,
               ),
               itemBuilder: (context, index) {
-                return ProductWidget(
-                  product: snapshot.data![index].product,
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProductWidget(
+                    product: snapshot.data![index].product,
+                  ),
                 );
               },
             );

@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
-import 'package:go_shop_admin_panel/model/category.dart';
-import 'package:go_shop_admin_panel/responsive.dart';
+import 'package:go_shop_admin_panel/model/category.dart' as custom;
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/widgets/category_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import '../widgets/side_menu.dart';
 
 class ProductCategories extends StatefulWidget {
   const ProductCategories({super.key});
@@ -17,9 +19,17 @@ class ProductCategories extends StatefulWidget {
 class _ProductCategoriesState extends State<ProductCategories> {
   @override
   Widget build(BuildContext context) {
-    var categories = Provider.of<List<Category>>(context);
+    var categories = Provider.of<List<custom.Category>>(context);
     return Scaffold(
+      drawer: const SideMenu(),
       appBar: AppBar(
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              });
+        }),
         title: Text(
           "Categories",
           style: kTextStyle(18.sp, context),
@@ -36,7 +46,7 @@ class _ProductCategoriesState extends State<ProductCategories> {
           : GridView.builder(
               itemCount: categories.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
+                crossAxisCount: 2,
               ),
               itemBuilder: (context, index) {
                 return Padding(
