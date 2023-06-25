@@ -59,7 +59,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                                     return AlertDialog(
                                       title: const Text("Delete product"),
                                       content: const Text(
-                                          "Do you want to delete this product?"),
+                                          "Do you want to delete this product from your featured product list?"),
                                       actions: [
                                         TextButton(
                                           onPressed: () async {
