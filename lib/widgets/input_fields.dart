@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:go_shop_admin_panel/utils/extensions.dart';
 import '../consts/textstyle.dart';
-import '../global_products.dart';
 import '../services/utils.dart';
 import 'custom_textfield.dart';
 

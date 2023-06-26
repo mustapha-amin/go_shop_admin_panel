@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../model/featured_product.dart';
 import '../model/product.dart';
 import '/utils/snackbar.dart';
+import '../model/order.dart' as k;
 
 class Database {
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -106,5 +107,12 @@ class Database {
   static Stream<List<Customer>> getCustomers() {
     return firestore.collection('customers').snapshots().map(
         (snap) => snap.docs.map((e) => Customer.fromJson(e.data())).toList());
+  }
+
+  Stream<List<k.Order>> fetchOrders() {
+    return firestore
+        .collection('orders').snapshots()
+        .map((snap) =>
+            snap.docs.map((e) => k.Order.fromJson(e.data())).toList());
   }
 }

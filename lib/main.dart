@@ -2,12 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_shop_admin_panel/controllers/menu_controller.dart';
 import 'package:go_shop_admin_panel/model/category.dart';
+import 'package:go_shop_admin_panel/model/customer.dart';
 import 'package:go_shop_admin_panel/screens/main_screen.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '/services/theme_prefs.dart';
 import '/theme/theme.dart';
+import 'model/order.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +25,14 @@ Future main() async {
         value: Database.getCategories(),
         initialData: [],
       ),
+      StreamProvider<List<Order>?>.value(
+          value: Database().fetchOrders(),
+          initialData: [],
+        ),
+        StreamProvider<List<Customer>?>.value(
+          value: Database.getCustomers(), 
+          initialData: []
+        )
     ],
     child: Sizer(
       builder: (context, _, __) {
