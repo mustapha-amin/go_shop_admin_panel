@@ -24,7 +24,7 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: 80.w,
+      width: 250,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: ListView(
         children: const [
@@ -34,9 +34,10 @@ class _SideMenuState extends State<SideMenu> {
             ),
           ),
           DrawerListTile(
-              title: "Main",
-              destination: MainScreen(),
-              icon: Icons.home_filled),
+            title: "Main",
+            destination: MainScreen(),
+            icon: Icons.home_filled,
+          ),
           DrawerListTile(
             title: "Customers",
             destination: CustomersScreen(),
