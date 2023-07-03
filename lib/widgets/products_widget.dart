@@ -5,7 +5,9 @@ import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/model/product.dart';
 import 'package:go_shop_admin_panel/screens/feature_product.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
+import 'package:go_shop_admin_panel/utils/consts.dart';
 import 'package:go_shop_admin_panel/utils/extensions.dart';
+import 'package:go_shop_admin_panel/utils/screensize.dart';
 import 'package:sizer/sizer.dart';
 
 import 'shimmer_widget.dart';
@@ -24,7 +26,9 @@ class _ProductWidgetState extends State<ProductWidget> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width / 2,
+      margin: EdgeInsets.all(5),
+      width: isPCorTablet(context) ? 40.w : 50.w,
+      height: 35.h,
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
@@ -37,131 +41,132 @@ class _ProductWidgetState extends State<ProductWidget> {
           ),
         ],
       ),
-      child: Stack(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Positioned(
-            right: 1,
-            child: PopupMenuButton<String>(
-              icon: const Icon(
-                Icons.more_vert_sharp,
-              ),
-              itemBuilder: (context) {
-                return widget.featured!
-                    ? [
-                        PopupMenuItem(
-                          child: const Text("Delete"),
-                          onTap: () {
-                            log(widget.product!.id.toString());
-                            Future.delayed(Duration.zero, () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text("Delete product"),
-                                      content: const Text(
-                                          "Do you want to delete this product from your featured product list?"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () async {
-                                            Database().removeFromFeatured(
-                                                widget.product!.id);
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("Yes"),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("No"),
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            });
-                          },
-                        ),
-                      ]
-                    : [
-                        const PopupMenuItem(
-                          child: Text("Edit"),
-                        ),
-                        PopupMenuItem(
-                          child: const Text("Delete"),
-                          onTap: () {
-                            log(widget.product!.id.toString());
-                            Future.delayed(Duration.zero, () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text("Delete product"),
-                                      content: const Text(
-                                          "Do you want to delete this product?"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Database()
-                                                .deleteProduct(widget.product!);
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("Yes"),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("No"),
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            });
-                          },
-                        ),
-                        PopupMenuItem(
-                          child: const Text("Feature"),
-                          onTap: () {
-                            Future.delayed(Duration.zero, () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return Feature(
-                                  product: widget.product,
-                                );
-                              }));
-                            });
-                          },
-                        )
-                      ];
-              },
-            ),
-          ),
-          Image.network(widget.product!.imgPath!, height: 13.h,
-              frameBuilder: (context, child, frame, _) {
-            if (frame == null) {
-              return ShimmerWidget(
-                height: size.height / 7,
-                width: size.width / 3,
-              );
-            }
-            return child;
-          }),
-          Positioned(
-            bottom: 10,
-            left: 10,
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Image.network(
+                  widget.product!.imgPath!,
+                  fit: BoxFit.fitHeight,
+                  height: 18.h,
+                  frameBuilder: (context, child, frame, _) {
+                    if (frame == null) {
+                      return ShimmerWidget(
+                        height: size.height / 7,
+                        width: size.width / 3,
+                      );
+                    }
+                    return child;
+                  },
+                ),
                 Text(
                   widget.product!.name!,
                   style: kTextStyle(15, context),
                 ),
                 Text(
-                  widget.product!.price!.toMoney,
-                  style: kTextStyle(15, context),
-                )
+                  '$nairaSymbol ${widget.product!.price!.toMoney}',
+                  style: kTextStyle(20, context),
+                ),
               ],
             ),
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_vert_sharp,
+            ),
+            itemBuilder: (context) {
+              return widget.featured!
+                  ? [
+                      PopupMenuItem(
+                        child: const Text("Delete"),
+                        onTap: () {
+                          log(widget.product!.id.toString());
+                          Future.delayed(Duration.zero, () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("Delete product"),
+                                    content: const Text(
+                                        "Do you want to delete this product from your featured product list?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          Database().removeFromFeatured(
+                                              widget.product!.id);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("Yes"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("No"),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          });
+                        },
+                      ),
+                    ]
+                  : [
+                      const PopupMenuItem(
+                        child: Text("Edit"),
+                      ),
+                      PopupMenuItem(
+                        child: const Text("Delete"),
+                        onTap: () {
+                          log(widget.product!.id.toString());
+                          Future.delayed(Duration.zero, () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("Delete product"),
+                                    content: const Text(
+                                        "Do you want to delete this product?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Database()
+                                              .deleteProduct(widget.product!);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("Yes"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("No"),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          });
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: const Text("Feature"),
+                        onTap: () {
+                          Future.delayed(Duration.zero, () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return Feature(
+                                product: widget.product,
+                              );
+                            }));
+                          });
+                        },
+                      )
+                    ];
+            },
           ),
         ],
       ),

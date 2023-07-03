@@ -29,8 +29,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
     var orders = Provider.of<List<Order>?>(context);
     return Scaffold(
       key: ordersKey,
-      drawer: SideMenu(),
-      appBar: isPCorTablet(context)
+      drawer: const SideMenu(),
+      appBar: isPC(context)
           ? null
           : AppBar(
               leading: Builder(builder: (BuildContext context) {
@@ -44,10 +44,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
       body: Row(
         children: [
-          isPCorTablet(context) ? SideMenu() : SizedBox(),
-          Expanded(
-              child: ListView(
-                  children: [...orders!.map((e) => OrderWidget(order: e))])),
+          isPC(context) ? SideMenu() : SizedBox(),
+          orders!.isEmpty
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Expanded(
+                  child: ListView(
+                    children: [
+                      ...orders.map(
+                        (e) => OrderWidget(order: e),
+                      )
+                    ],
+                  ),
+                ),
         ],
       ),
     );

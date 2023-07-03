@@ -20,8 +20,6 @@ class ProductCategories extends StatefulWidget {
 class _ProductCategoriesState extends State<ProductCategories> {
   final GlobalKey<ScaffoldState> categoriesKey = GlobalKey();
 
-  
-
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -34,7 +32,7 @@ class _ProductCategoriesState extends State<ProductCategories> {
     return Scaffold(
       key: categoriesKey,
       drawer: const SideMenu(),
-      appBar: isPCorTablet(context)
+      appBar: isPC(context)
           ? null
           : AppBar(
               leading: Builder(builder: (BuildContext context) {
@@ -46,18 +44,18 @@ class _ProductCategoriesState extends State<ProductCategories> {
               }),
               title: Text(
                 "Categories",
-                style: kTextStyle(18.sp, context),
+                style: kTextStyle(18, context),
               ),
               centerTitle: true,
             ),
       body: Row(
         children: [
-          isPCorTablet(context) ? const SideMenu() : const SizedBox(),
+          isPC(context) ? const SideMenu() : const SizedBox(),
           Expanded(
             child: GridView.builder(
               itemCount: categories.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: isPCorTablet(context) ? 4 : 2,
               ),
               itemBuilder: (context, index) {
                 return Padding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_shop_admin_panel/model/category.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,13 +14,11 @@ class InputFields extends StatefulWidget {
       productNameController,
       descriptionController,
       quantityController;
-  Category? selectedCategory;
 
   InputFields({
     this.priceController,
     this.productNameController,
     this.descriptionController,
-    this.selectedCategory,
     this.quantityController,
     super.key,
   });
@@ -34,47 +33,71 @@ class _InputFieldsState extends State<InputFields> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomTextField(
+        TextField(
           keyboardType: TextInputType.text,
-          hint: 'Product',
+          decoration: InputDecoration(
+            hintText: "Product",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
           controller: widget.productNameController!,
-          valueKey: 'product',
         ),
         addVerticalSpacing(10),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomTextField(
-              width: 44.w,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              hint: 'Price',
-              controller: widget.priceController!,
-              valueKey: 'price',
-              isPrice: true,
-              suffix: "NGN",
-              onChanged: (_) {
-                widget.priceController!.text.isNotEmpty
-                    ? setState(() {
-                        widget.priceController!.text = double.parse(widget
-                                .priceController!.text
-                                .replaceAll(',', ''))
-                            .toMoney;
-                        widget.priceController!.selection =
-                            TextSelection.fromPosition(
-                          TextPosition(
-                              offset: widget.priceController!.text.length),
-                        );
-                      })
-                    : null;
-              },
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 3),
+                child: TextField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  decoration: InputDecoration(
+                    hintText: 'Price',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    suffixText: "NGN",
+                  ),
+                  controller: widget.priceController!,
+                  onChanged: (_) {
+                    widget.priceController!.text.isNotEmpty
+                        ? setState(() {
+                            widget.priceController!.text = double.parse(widget
+                                    .priceController!.text
+                                    .replaceAll(',', ''))
+                                .toMoney;
+                            widget.priceController!.selection =
+                                TextSelection.fromPosition(
+                              TextPosition(
+                                  offset: widget.priceController!.text.length),
+                            );
+                          })
+                        : null;
+                  },
+                ),
+              ),
             ),
-            CustomTextField(
-              width: 44.w,
-              keyboardType: TextInputType.number,
-              hint: 'quantity',
-              controller: widget.quantityController!,
-              valueKey: 'quantity',
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 3),
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: 'Quantity',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  controller: widget.quantityController!,
+                ),
+              ),
             ),
           ],
         ),
@@ -98,25 +121,20 @@ class DescriptionField extends StatefulWidget {
 class _DescriptionFieldState extends State<DescriptionField> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return SizedBox(
-      width: 100.w,
-      child: TextFormField(
-        textCapitalization: TextCapitalization.sentences,
-        key: const ValueKey('description'),
-        controller: widget.descriptionController,
-        decoration: InputDecoration(
-          hintText: 'description',
-          hintStyle: const TextStyle(
-            color: Colors.grey,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
+    return TextFormField(
+      textCapitalization: TextCapitalization.sentences,
+      key: const ValueKey('description'),
+      controller: widget.descriptionController,
+      decoration: InputDecoration(
+        hintText: 'description',
+        hintStyle: const TextStyle(
+          color: Colors.grey,
         ),
-        maxLines: 3,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
+      maxLines: 3,
     );
   }
 }
-

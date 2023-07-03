@@ -17,9 +17,7 @@ class Products extends StatefulWidget {
 
 class _ProductsState extends State<Products> {
   final GlobalKey<ScaffoldState> productsKey = GlobalKey();
- 
-  
-  
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -30,7 +28,7 @@ class _ProductsState extends State<Products> {
     return Scaffold(
       drawer: const SideMenu(),
       key: productsKey,
-      appBar: isPCorTablet(context)
+      appBar: isPC(context)
           ? null
           : AppBar(
               leading: Builder(
@@ -46,7 +44,7 @@ class _ProductsState extends State<Products> {
             ),
       body: Row(
         children: [
-          isPCorTablet(context)
+          isPC(context)
               ? const SizedBox(
                   child: SideMenu(),
                 )
@@ -62,15 +60,12 @@ class _ProductsState extends State<Products> {
                           itemCount: products.length,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+                            crossAxisCount: isPCorTablet(context) ? 4 : 2,
                           ),
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ProductWidget(
-                                product: products[index],
-                                featured: false,
-                              ),
+                            return ProductWidget(
+                              product: products[index],
+                              featured: false,
                             );
                           },
                         )

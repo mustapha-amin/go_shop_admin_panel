@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../services/utils.dart';
 import '../utils/screensize.dart';
+import '../widgets/image_picker.dart';
 import '../widgets/loading_widget.dart';
 
 class AddProduct extends StatefulWidget {
@@ -35,6 +36,7 @@ class _AddProductState extends State<AddProduct> {
   custom.Category? category;
   final _formKey = GlobalKey<FormState>();
   File? selectedImage;
+  Uint8List? webImage;
   bool isLoading = false;
   final GlobalKey<ScaffoldState> addProductKey = GlobalKey();
 
@@ -42,10 +44,20 @@ class _AddProductState extends State<AddProduct> {
     try {
       final ImagePicker imagePicker = ImagePicker();
       XFile? image = await imagePicker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        setState(() {
-          selectedImage = File(image.path);
-        });
+      if (!kIsWeb) {
+        if (image != null) {
+          setState(() {
+            selectedImage = File(image.path);
+          });
+        }
+      } else {
+        if (image != null) {
+          var img = await image.readAsBytes();
+          setState(() {
+            webImage = img;
+            selectedImage = File('a');
+          });
+        }
       }
     } on PlatformException catch (e) {
       log(e.message!);
@@ -66,201 +78,268 @@ class _AddProductState extends State<AddProduct> {
         : Scaffold(
             key: addProductKey,
             drawer: const SideMenu(),
-            appBar: isPCorTablet(context)
+            resizeToAvoidBottomInset: false,
+            appBar: isPC(context)
                 ? null
                 : AppBar(
                     title: Text("Add product"),
-                    leading: Builder(builder: (BuildContext context) {
-                      return IconButton(
-                          icon: const Icon(Icons.menu),
-                          onPressed: () {
-                            Scaffold.of(context).openDrawer();
-                          });
-                    }),
+                    leading: Builder(
+                      builder: (BuildContext context) {
+                        return IconButton(
+                            icon: const Icon(Icons.menu),
+                            onPressed: () {
+                              Scaffold.of(context).openDrawer();
+                            });
+                      },
+                    ),
                   ),
             body: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                isPCorTablet(context) ? SideMenu() : SizedBox(),
-                Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Form(
-                          key: _formKey,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                isPC(context) ? const SideMenu() : const SizedBox(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Form(
+                              key: _formKey,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      height: 10.h,
-                                      width: 100.w,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        border: Border.all(
-                                          color: Colors.grey[600] as Color,
-                                        ),
-                                      ),
-                                      child: DropdownButtonHideUnderline(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 5,
-                                            right: 20,
-                                            top: 5,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: 8.h,
+                                          width: isPC(context) ? 40.w : 100.w,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
                                           ),
-                                          child:
-                                              DropdownButton<custom.Category>(
-                                            iconSize: 5.h,
-                                            isExpanded: true,
-                                            hint: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: Text(
-                                                "Category",
-                                                style: GoogleFonts.lato(
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
+                                          child: DropdownButtonHideUnderline(
+                                            child:
+                                                DropdownButton<custom.Category>(
+                                              padding: EdgeInsets.all(4),
+                                              elevation: 3,
+                                              value: category,
+                                              isExpanded: true,
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  category = val;
+                                                });
+                                              },
+                                              hint: const Text(
+                                                  'Select a category'),
+                                              items: categories.map<
+                                                      DropdownMenuItem<
+                                                          custom.Category>>(
+                                                  (custom.Category value) {
+                                                return DropdownMenuItem<
+                                                    custom.Category>(
+                                                  value: value,
+                                                  child: Text(value.name!),
+                                                );
+                                              }).toList(),
                                             ),
-                                            elevation: 0,
-                                            dropdownColor: Colors.grey[300],
-                                            value: category,
-                                            items: categories
-                                                .map((e) => DropdownMenuItem<
-                                                        custom.Category>(
-                                                      value: e,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(left: 10),
-                                                        child: Text(
-                                                          e.name!,
-                                                          style: kTextStyle(
-                                                              15, context),
-                                                        ),
-                                                      ),
-                                                    ))
-                                                .toList(),
-                                            onChanged: (val) {
-                                              setState(() {
-                                                category = val;
-                                              });
-                                            },
                                           ),
                                         ),
-                                      ),
+                                        addVerticalSpacing(20),
+                                        SizedBox(
+                                          width: isPC(context) ? 40.w : 100.w,
+                                          child: InputFields(
+                                            priceController: priceController,
+                                            productNameController:
+                                                productNameController,
+                                            descriptionController:
+                                                descriptionController,
+                                            quantityController:
+                                                quantityController,
+                                          ),
+                                        ),
+                                        addVerticalSpacing(20),
+                                        !isPC(context)
+                                            ? kIsWeb
+                                                ? ImagePickerWidget(
+                                                    webimage: webImage,
+                                                    selectedImage: null,
+                                                    onCancelled: () {
+                                                      setState(() {
+                                                        webImage = null;
+                                                      });
+                                                    },
+                                                    size: isPC(context)
+                                                        ? Size(45.w, 40.h)
+                                                        : Size(100.w, 40.w),
+                                                    selectImage: selectImage,
+                                                  )
+                                                : ImagePickerWidget(
+                                                    selectedImage:
+                                                        selectedImage,
+                                                    webimage: null,
+                                                    onCancelled: () {
+                                                      setState(() {
+                                                        selectedImage = null;
+                                                      });
+                                                    },
+                                                    size: isPC(context)
+                                                        ? Size(45.w, 45.h)
+                                                        : Size(100.w, 45.w),
+                                                    selectImage: selectImage,
+                                                  )
+                                            : const SizedBox()
+                                      ],
                                     ),
-                                    addVerticalSpacing(20),
-                                    InputFields(
-                                        priceController: priceController,
-                                        productNameController:
-                                            productNameController,
-                                        descriptionController:
-                                            descriptionController,
-                                        quantityController: quantityController),
-                                    addVerticalSpacing(20),
-                                    InkWell(
-                                      onTap: selectImage,
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                              width: 100.w,
-                                              height: 30.h,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[300],
-                                                border: Border.all(
-                                                  width: 0.2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: selectedImage == null
-                                                  ? Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Icon(
-                                                          Icons
-                                                              .photo_size_select_actual_outlined,
-                                                          size: size.width / 10,
-                                                          color:
-                                                              Colors.grey[700],
-                                                        ),
-                                                        Text(
-                                                          "Select a photo",
-                                                          style: kTextStyle(
-                                                              15, context),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : Image.file(selectedImage!)),
-                                          selectedImage != null
-                                              ? IconButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      selectedImage = null;
-                                                    });
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.clear_rounded,
-                                                  ),
-                                                )
-                                              : const SizedBox()
-                                        ],
-                                      ),
-                                    )
+                                    addVerticalSpacing(10),
                                   ],
                                 ),
-                                addVerticalSpacing(10),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 90.w,
-                      height: 9.h,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 13, 2, 40),
-                          foregroundColor: Colors.white,
-                        ),
-                        onPressed: () async {
-                          priceController.text.isNotEmpty &&
-                                  descriptionController.text.isNotEmpty &&
-                                  productNameController.text.isNotEmpty &&
-                                  quantityController.text.isNotEmpty &&
-                                  selectedImage != null
-                              ? {
-                                  setState(() {
-                                    isLoading = true;
-                                  }),
-                                  await Database().addProduct(
-                                    context,
-                                    Product(
-                                      name: productNameController.text.trim(),
-                                      imgPath: selectedImage!.path,
-                                      price: double.parse(priceController.text
-                                          .replaceAll(',', '')),
-                                      category: category!.name,
-                                      description: descriptionController.text,
+                            !isPC(context)
+                                ? SizedBox(
+                                    width: 100.w,
+                                    height: 9.h,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 13, 2, 40),
+                                        foregroundColor: Colors.white,
+                                      ),
+                                      onPressed: () async {
+                                        priceController.text.isNotEmpty &&
+                                                descriptionController
+                                                    .text.isNotEmpty &&
+                                                productNameController
+                                                    .text.isNotEmpty &&
+                                                quantityController
+                                                    .text.isNotEmpty &&
+                                                selectedImage != null
+                                            ? {
+                                                setState(() {
+                                                  isLoading = true;
+                                                }),
+                                                await Database().addProduct(
+                                                  context,
+                                                  Product(
+                                                    name: productNameController
+                                                        .text
+                                                        .trim(),
+                                                    imgPath:
+                                                        selectedImage!.path,
+                                                    price: double.parse(
+                                                        priceController.text
+                                                            .replaceAll(
+                                                                ',', '')),
+                                                    category: category!.name,
+                                                    description:
+                                                        descriptionController
+                                                            .text,
+                                                  ),
+                                                ),
+                                              }
+                                            : showSnackbar(context,
+                                                "Fill the required details");
+                                      },
+                                      child: const Text("Upload product"),
                                     ),
-                                  ),
-                                }
-                              : showSnackbar(
-                                  context, "Fill the required details");
-                        },
-                        child: const Text("Upload product"),
-                      ),
+                                  )
+                                : const SizedBox(),
+                            addVerticalSpacing(10),
+                          ],
+                        ),
+                      ],
                     ),
-                    addVerticalSpacing(10),
-                  ],
+                  ),
                 ),
+                isPC(context)
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          kIsWeb
+                              ? ImagePickerWidget(
+                                  webimage: webImage,
+                                  selectedImage: null,
+                                  onCancelled: () {
+                                    setState(() {
+                                      webImage = null;
+                                    });
+                                  },
+                                  size: isPC(context)
+                                      ? Size(45.w, 40.h)
+                                      : Size(100.w, 40.w),
+                                  selectImage: selectImage,
+                                )
+                              : ImagePickerWidget(
+                                  selectedImage: selectedImage,
+                                  webimage: null,
+                                  onCancelled: () {
+                                    setState(() {
+                                      selectedImage = null;
+                                    });
+                                  },
+                                  size: isPC(context)
+                                      ? Size(45.w, 45.h)
+                                      : Size(100.w, 45.w),
+                                  selectImage: selectImage,
+                                ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 30.w,
+                              height: 9.h,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 13, 2, 40),
+                                  foregroundColor: Colors.white,
+                                ),
+                                onPressed: () async {
+                                  priceController.text.isNotEmpty &&
+                                          descriptionController
+                                              .text.isNotEmpty &&
+                                          productNameController
+                                              .text.isNotEmpty &&
+                                          quantityController.text.isNotEmpty &&
+                                          selectedImage != null
+                                      ? {
+                                          setState(() {
+                                            isLoading = true;
+                                          }),
+                                          await Database().addProduct(
+                                            context,
+                                            Product(
+                                              name: productNameController.text
+                                                  .trim(),
+                                              imgPath: selectedImage!.path,
+                                              price: double.parse(
+                                                  priceController.text
+                                                      .replaceAll(',', '')),
+                                              category: category!.name,
+                                              description:
+                                                  descriptionController.text,
+                                            ),
+                                          ),
+                                        }
+                                      : showSnackbar(
+                                          context, "Fill the required details");
+                                },
+                                child: const Text("Upload product"),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : const SizedBox()
               ],
             ),
           );

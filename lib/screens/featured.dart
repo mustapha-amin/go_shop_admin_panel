@@ -34,7 +34,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
     return Scaffold(
       key: featuredProductsKey,
       drawer: SideMenu(),
-      appBar: isPCorTablet(context)
+      appBar: isPC(context)
           ? null
           : AppBar(
               leading: Builder(builder: (BuildContext context) {
@@ -49,7 +49,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
             ),
       body: Row(
         children: [
-          isPCorTablet(context) ? SideMenu() : SizedBox(),
+          isPC(context) ? SideMenu() : SizedBox(),
           StreamBuilder(
             stream: featured,
             builder: (context, snapshot) {
@@ -58,7 +58,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
                   child: GridView.builder(
                     itemCount: snapshot.data!.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                      crossAxisCount: isPCorTablet(context) ? 4 : 2,
                     ),
                     itemBuilder: (context, index) {
                       return Padding(

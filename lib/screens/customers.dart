@@ -28,7 +28,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
     return Scaffold(
       key: customerKey,
       drawer: const SideMenu(),
-      appBar: isPCorTablet(context)
+      appBar: isPC(context)
           ? null
           : AppBar(
               leading: Builder(builder: (BuildContext context) {
@@ -47,7 +47,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
             ),
       body: Row(
         children: [
-          isPCorTablet(context)
+          isPC(context)
               ? const SizedBox(
                   child: SideMenu(),
                 )

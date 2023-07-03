@@ -19,7 +19,10 @@ class DrawerListTile extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: kTextStyle(15, context),
+        style: kTextStyle(
+          15,
+          context,
+        ),
       ),
       leading: Icon(
         icon,

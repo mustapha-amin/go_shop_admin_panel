@@ -24,6 +24,9 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0),
+      ),
       width: 250,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: ListView(

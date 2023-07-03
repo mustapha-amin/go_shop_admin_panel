@@ -34,7 +34,6 @@ class OrderWidget extends StatelessWidget {
               width: 15.w,
               height: 15.w,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(

@@ -17,8 +17,6 @@ class DashBoard extends StatefulWidget {
 class _DashBoardState extends State<DashBoard> {
   final GlobalKey<ScaffoldState> dashboardKey = GlobalKey();
 
- 
-
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -28,48 +26,57 @@ class _DashBoardState extends State<DashBoard> {
     });
     var categories = Provider.of<List<custom.Category>>(context);
     return Scaffold(
-        key: dashboardKey,
-        appBar: isPCorTablet(context)
-            ? null
-            : AppBar(
-                leading: Builder(
-                  builder: (BuildContext context) {
-                    return IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                    );
-                  },
-                ),
-              ),
-        drawer: const SideMenu(),
-        body: Row(
-          children: [
-            isPCorTablet(context) ? const SideMenu() : const SizedBox(),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  addVerticalSpacing(20),
-                ],
+      key: dashboardKey,
+      appBar: isPC(context)
+          ? null
+          : AppBar(
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  );
+                },
               ),
             ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            categories.isEmpty
-                ? showSnackbar(context, "You haven't added a category yet")
-                : Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return const AddProduct();
-                    }),
-                  );
-          },
-          tooltip: 'Add product',
-          child: const Icon(Icons.add),
-        ));
+      drawer: const SideMenu(),
+      body: Row(
+        children: [
+          isPC(context) ? const SideMenu() : const SizedBox(),
+           Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Container(
+                      child: Text("Total income: "),
+                    ))
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: !kIsWeb
+          ? FloatingActionButton(
+              onPressed: () {
+                categories.isEmpty
+                    ? showSnackbar(context, "You haven't added a category yet")
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return const AddProduct();
+                        }),
+                      );
+              },
+              tooltip: 'Add product',
+              child: const Icon(Icons.add),
+            )
+          : null,
+    );
   }
 }

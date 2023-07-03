@@ -15,7 +15,7 @@ class _ShimmerWidgetState extends State<ShimmerWidget> {
     return Shimmer.fromColors(
       period: const Duration(milliseconds: 700),
       baseColor: Colors.grey[100]!,
-      highlightColor: Colors.grey[500]!,
+      highlightColor: Colors.grey[300]!,
       child: Container(
         width: widget.width,
         height: widget.height,
