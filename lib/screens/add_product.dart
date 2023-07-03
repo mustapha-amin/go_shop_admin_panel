@@ -263,6 +263,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 isPC(context)
                     ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           kIsWeb
@@ -295,8 +296,8 @@ class _AddProductState extends State<AddProduct> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
-                              width: 30.w,
-                              height: 9.h,
+                              width: 20.w,
+                              height: 6.h,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:

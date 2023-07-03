@@ -1,12 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/model/category.dart' as custom;
 import 'package:go_shop_admin_panel/screens/add_product.dart';
+import 'package:go_shop_admin_panel/utils/consts.dart';
 import 'package:go_shop_admin_panel/utils/screensize.dart';
 import 'package:go_shop_admin_panel/utils/snackbar.dart';
+import 'package:go_shop_admin_panel/widgets/charts.dart';
+import 'package:go_shop_admin_panel/widgets/sales.dart';
 import 'package:go_shop_admin_panel/widgets/side_menu.dart';
 import 'package:go_shop_admin_panel/widgets/spacings.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
+import 'package:fl_chart/fl_chart.dart';
+
+import '../widgets/pie_chart.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({Key? key}) : super(key: key);
@@ -43,22 +51,60 @@ class _DashBoardState extends State<DashBoard> {
             ),
       drawer: const SideMenu(),
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           isPC(context) ? const SideMenu() : const SizedBox(),
-           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: Container(
-                      child: Text("Total income: "),
-                    ))
-                  ],
-                )
-              ],
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
+                          height: 30.h,
+                          width: !isPCorTablet(context) ? 90.w : 30.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey[100]!,
+                                blurRadius: 0.5,
+                              ),
+                              BoxShadow(
+                                color: Colors.grey[100]!,
+                                blurRadius: 0.5,
+                              )
+                            ],
+                          ),
+                          child: const SalesWidget(),
+                        ),
+                      ),
+                      isPCorTablet(context)
+                          ? const Expanded(child: PieChartWidget())
+                          : const SizedBox(),
+                    ],
+                  ),
+                  !isPCorTablet(context)
+                      ? const Expanded(child: PieChartWidget())
+                      : const SizedBox(),
+                  addVerticalSpacing(30),
+                  const Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Chart(),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
+          )
         ],
       ),
       floatingActionButton: !kIsWeb
