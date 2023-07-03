@@ -8,6 +8,7 @@ import 'package:go_shop_admin_panel/screens/main_screen.dart';
 import 'package:go_shop_admin_panel/screens/product_categories.dart';
 import 'package:go_shop_admin_panel/services/database.dart';
 import 'package:go_shop_admin_panel/services/theme_prefs.dart';
+import 'package:go_shop_admin_panel/utils/screensize.dart';
 import 'package:go_shop_admin_panel/widgets/drawer_listtile.dart';
 import 'package:sizer/sizer.dart';
 
@@ -30,48 +31,48 @@ class _SideMenuState extends State<SideMenu> {
       width: 250,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: ListView(
-        children: const [
-          DrawerHeader(
+        children: [
+          const DrawerHeader(
             child: CircleAvatar(
               backgroundImage: AssetImage('assets/images/general/admin.jpg'),
             ),
           ),
-          DrawerListTile(
+          const DrawerListTile(
             title: "Main",
             destination: MainScreen(),
             icon: Icons.home_filled,
           ),
-          DrawerListTile(
+          const DrawerListTile(
             title: "Customers",
             destination: CustomersScreen(),
             icon: Icons.account_circle,
           ),
-          DrawerListTile(
+          const DrawerListTile(
               title: "View products",
               destination: ProductCategories(),
               icon: Icons.store),
-          DrawerListTile(
+          const DrawerListTile(
             title: "Orders",
             destination: OrdersScreen(),
             icon: Icons.shopping_bag_rounded,
           ),
-          DrawerListTile(
+          const DrawerListTile(
             title: "Add category",
             destination: AddCategory(),
             icon: Icons.category_outlined,
           ),
-          DrawerListTile(
+          const DrawerListTile(
             title: "Featured",
             destination: FeaturedProducts(),
             icon: Icons.star,
           ),
-          kIsWeb
-              ? DrawerListTile(
+          isPCorTablet(context)
+              ? const DrawerListTile(
                   title: "Add products",
                   destination: AddProduct(),
                   icon: Icons.add,
                 )
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

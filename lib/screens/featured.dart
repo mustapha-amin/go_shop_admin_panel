@@ -48,6 +48,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
               centerTitle: true,
             ),
       body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           isPC(context) ? SideMenu() : SizedBox(),
           StreamBuilder(

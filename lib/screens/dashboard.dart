@@ -24,6 +24,8 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   final GlobalKey<ScaffoldState> dashboardKey = GlobalKey();
+  ScrollController _scrollController = ScrollController();
+  bool showFab = true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +33,21 @@ class _DashBoardState extends State<DashBoard> {
       isPCorTablet(context) && dashboardKey.currentState!.isDrawerOpen
           ? dashboardKey.currentState!.openEndDrawer()
           : null;
+      _scrollController.addListener(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          setState(() {
+            showFab = false;
+          });
+        } else {
+          setState(() {
+            showFab = true;
+          });
+        }
+      });
     });
     var categories = Provider.of<List<custom.Category>>(context);
+
     return Scaffold(
       key: dashboardKey,
       appBar: isPC(context)
@@ -58,6 +73,7 @@ class _DashBoardState extends State<DashBoard> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView(
+                controller: _scrollController,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +103,12 @@ class _DashBoardState extends State<DashBoard> {
                         ),
                       ),
                       isPCorTablet(context)
-                          ? const Expanded(child: PieChartWidget())
+                          ? Flex(
+                              direction: Axis.horizontal,
+                              children: [
+                                PieChartWidget(),
+                              ],
+                            )
                           : const SizedBox(),
                     ],
                   ),
@@ -95,11 +116,9 @@ class _DashBoardState extends State<DashBoard> {
                       ? const Expanded(child: PieChartWidget())
                       : const SizedBox(),
                   addVerticalSpacing(30),
-                  const Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Chart(),
-                    ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Chart(),
                   )
                 ],
               ),
@@ -107,7 +126,7 @@ class _DashBoardState extends State<DashBoard> {
           )
         ],
       ),
-      floatingActionButton: !kIsWeb
+      floatingActionButton: !isPCorTablet(context) && showFab
           ? FloatingActionButton(
               onPressed: () {
                 categories.isEmpty

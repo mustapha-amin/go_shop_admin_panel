@@ -210,7 +210,7 @@ class _AddCategoryState extends State<AddCategory> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: SizedBox(
                                   width: 100.w,
-                                  height: 7.h,
+                                  height: 8.h,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:

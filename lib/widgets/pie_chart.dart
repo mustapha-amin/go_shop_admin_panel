@@ -14,7 +14,7 @@ class PieChartWidget extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 20.h,
+          height: 30.h,
           width: 20.w,
           child: Padding(
             padding: const EdgeInsets.all(8.0),

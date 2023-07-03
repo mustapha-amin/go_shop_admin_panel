@@ -119,7 +119,7 @@ class _AddProductState extends State<AddProduct> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          height: 8.h,
+                                          height: 9.h,
                                           width: isPC(context) ? 40.w : 100.w,
                                           decoration: BoxDecoration(
                                             border:

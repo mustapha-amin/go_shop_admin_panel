@@ -28,7 +28,6 @@ class _ProductWidgetState extends State<ProductWidget> {
     return Container(
       margin: EdgeInsets.all(5),
       width: isPCorTablet(context) ? 40.w : 50.w,
-      height: 35.h,
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
@@ -49,20 +48,15 @@ class _ProductWidgetState extends State<ProductWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(
-                  widget.product!.imgPath!,
-                  fit: BoxFit.fitHeight,
-                  height: 18.h,
-                  frameBuilder: (context, child, frame, _) {
-                    if (frame == null) {
-                      return ShimmerWidget(
-                        height: size.height / 7,
-                        width: size.width / 3,
-                      );
-                    }
-                    return child;
-                  },
-                ),
+                Container(
+                    height: 15.h,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          widget.product!.imgPath!,
+                        ),
+                      ),
+                    )),
                 Text(
                   widget.product!.name!,
                   style: kTextStyle(15, context),
