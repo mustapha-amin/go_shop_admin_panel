@@ -26,16 +26,7 @@ class ProductsRepository {
         imageUrls.add(url);
       }
 
-      final productWithImages = Product(
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        quantity: product.quantity,
-        category: product.category,
-        basePrice: product.basePrice,
-        discountPercentage: product.discountPercentage,
-        imageUrls: imageUrls,
-      );
+      final productWithImages = product.copyWith(imageUrls: imageUrls);
 
       await _firebaseFirestore
           .collection('products')

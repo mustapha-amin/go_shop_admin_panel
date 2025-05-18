@@ -39,7 +39,26 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Stack(
-      children: [Dashboard(), if (ref.watch(appIsLoadingProvider)) Loader()],
+      alignment: Alignment.center,
+      children: [
+        ref
+            .watch(authStateProvider)
+            .when(
+              data: (user) {
+                if (user != null) {
+                  return Dashboard();
+                }
+                return AdminSignIn();
+              },
+              error: (e, __) {
+                return Scaffold(body: Center(child: Text(e.toString())));
+              },
+              loading: () {
+                return Scaffold(body: Center(child: Loader()));
+              },
+            ),
+        if (ref.watch(appIsLoadingProvider)) Loader(),
+      ],
     );
   }
 }

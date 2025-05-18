@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_shop_admin_panel/features/products/repository/products_repository.dart';
 
 final firestoreProvider = Provider((ref) => FirebaseFirestore.instance);
 final storageProvider = Provider((ref) => FirebaseStorage.instance);
+final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
+final authStateProvider = StreamProvider((ref) {
+  return ref.watch(firebaseAuthProvider).authStateChanges();
+});
 final productRepoProvider = Provider((ref) {
   return ProductsRepository(
     ref.read(firestoreProvider),

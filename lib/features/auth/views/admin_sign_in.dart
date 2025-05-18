@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_shop_admin_panel/consts/assets.dart';
 import 'package:go_shop_admin_panel/core/extensions.dart';
+import 'package:go_shop_admin_panel/features/auth/controller/auth_controller.dart';
 import 'package:go_shop_admin_panel/features/dashboard/views/dashboard.dart';
+import 'package:go_shop_admin_panel/shared/k_flushbar.dart';
 import 'package:go_shop_admin_panel/shared/loader.dart';
 import 'package:go_shop_admin_panel/utils/textstyle.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class AdminSignIn extends StatefulWidget {
+class AdminSignIn extends ConsumerStatefulWidget {
   static const route = '/';
   const AdminSignIn({super.key});
 
   @override
-  State<AdminSignIn> createState() => _AdminSignInState();
+  ConsumerState<AdminSignIn> createState() => _AdminSignInState();
 }
 
-class _AdminSignInState extends State<AdminSignIn> {
+class _AdminSignInState extends ConsumerState<AdminSignIn> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
@@ -27,15 +30,15 @@ class _AdminSignInState extends State<AdminSignIn> {
     super.dispose();
   }
 
-  Future<void> _handleSignIn(String password) async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
-      // TODO: Implement actual authentication logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulated delay
-      setState(() => _isLoading = false);
-      if (context.mounted && password == "Password123#") {
-        context.replace(Dashboard());
-      }
+  Future<void> _handleSignIn(
+    BuildContext context,
+    WidgetRef ref,
+    String password,
+  ) async {
+    try {
+      await signInCtrl(ref, "mustaphaamin2003@gmail.com", password);
+    } catch (e) {
+      displayFlushBar(context, e.toString(), isError: true);
     }
   }
 
@@ -130,28 +133,33 @@ class _AdminSignInState extends State<AdminSignIn> {
                           },
                         ),
                         const SizedBox(height: 24),
-                        ShadButton(
-                          onPressed:
-                              () =>
-                                  _isLoading
-                                      ? null
-                                      : _handleSignIn(
-                                        _passwordController.text.trim(),
-                                      ),
-                          backgroundColor: Colors.blue[900],
-                          child:
-                              _isLoading
-                                  ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                  : "Sign in".style(
-                                    fontSize: 16,
-                                    color: Colors.white,
+                        ValueListenableBuilder(
+                          valueListenable: _passwordController,
+                          builder: (context, val, _) {
+                            return ShadButton(
+                              enabled: val.text.isNotEmpty,
+                              onPressed:
+                                  () => _handleSignIn(
+                                    context,
+                                    ref,
+                                    _passwordController.text.trim(),
                                   ),
+
+                              child:
+                                  _isLoading
+                                      ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                      : "Sign in".style(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                            );
+                          },
                         ),
                       ],
                     ),

@@ -1,17 +1,24 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/core/extensions.dart';
+import 'package:go_shop_admin_panel/features/dashboard/widgets/drawer.dart';
+import 'package:go_shop_admin_panel/features/products/controllers/product_controller.dart';
+import 'package:go_shop_admin_panel/model/product.dart';
 import 'package:go_shop_admin_panel/shared/k_flushbar.dart';
 import 'package:go_shop_admin_panel/shared/loader.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uuid/uuid.dart';
 
 final pickedImagesProvider = StateProvider<List<Uint8List>>((ref) {
   return [];
@@ -23,6 +30,16 @@ final discountProvider = StateProvider<String>((ref) => '');
 final quantityProvider = StateProvider<String>((ref) => '');
 final categoryProvider = StateProvider<String?>((ref) => null);
 final brandProvider = StateProvider<String>((ref) => '');
+
+final formIsValidProvider = StateProvider<bool>((ref) {
+  return ref.watch(pickedImagesProvider).isNotEmpty &&
+      ref.watch(productNameProvider).isNotEmpty &&
+      ref.watch(descriptionProvider).isNotEmpty &&
+      ref.watch(priceProvider).isNotEmpty &&
+      ref.watch(quantityProvider).isNotEmpty &&
+      ref.watch(categoryProvider)!.isNotEmpty &&
+      ref.watch(brandProvider).isNotEmpty;
+});
 
 final List<String> productCategories = [
   'Appliances',
@@ -120,6 +137,7 @@ class _AddProductsState extends ConsumerState<AddProducts> {
               children: [
                 Expanded(child: _buildImagesSection()),
                 _buildInfoSection(full: false),
+                _uploadProductButton(),
               ],
             )
             : ListView(
@@ -135,7 +153,7 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _buildImagesSection(),
-                          ShadButton(child: Text("Upload product")),
+                          _uploadProductButton(),
                         ],
                       ),
                     ),
@@ -143,6 +161,53 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                 ),
               ],
             );
+      },
+    );
+  }
+
+  Widget _uploadProductButton() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final formIsValid = ref.watch(formIsValidProvider);
+        return ShadButton(
+          enabled: formIsValid,
+          child: Text("Upload product"),
+          onPressed: () async {
+            if (formIsValid) {
+              final product = Product(
+                id: Uuid().v4(),
+                name: productNameController.text,
+                description: descriptionController.text,
+                quantity: int.parse(
+                  quantityController.text.replaceAll(',', '').trim(),
+                ),
+                category: ref.watch(categoryProvider)!,
+                basePrice: double.parse(
+                  priceController.text.replaceAll(',', '').trim(),
+                ),
+                discountPercentage:
+                    double.tryParse(
+                      discountController.text.replaceAll(',', '').trim(),
+                    ) ??
+                    0,
+                brand: brandController.text,
+              );
+              log(product.toString());
+              await ref
+                  .read(productNotifierProvider.notifier)
+                  .addProducts(product, ref.read(pickedImagesProvider));
+              ref.invalidate(pickedImagesProvider);
+              ref.invalidate(productNameProvider);
+              ref.invalidate(descriptionProvider);
+              ref.invalidate(priceProvider);
+              ref.invalidate(discountProvider);
+              ref.invalidate(quantityProvider);
+              ref.invalidate(categoryProvider);
+              ref.invalidate(brandProvider);
+              ref.invalidate(dashboardIndexProvider);
+            }
+          },
+        );
       },
     );
   }
@@ -303,6 +368,10 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                           child: _buildTextField(
                             'Quantity',
                             textEditingController: quantityController,
+                            textnputType: TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            formatter: ThousandsFormatter(),
                           ),
                         ),
                         Expanded(
@@ -326,7 +395,7 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                                 style: kTextStyle(14),
                               ),
                               underline: SizedBox(),
-                              padding: EdgeInsets.symmetric(horizontal: 6),
+                              padding: EdgeInsets.symmetric(horizontal: 3),
                               items:
                                   productCategories.map((String value) {
                                     return DropdownMenuItem<String>(
@@ -366,14 +435,22 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                         Expanded(
                           child: _buildTextField(
                             'Base Price',
-                            prefixIcon: Icons.attach_money,
+                            prefixIcon: Text('₦'),
                             textEditingController: priceController,
+                            formatter: ThousandsFormatter(),
+                            textnputType: TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: _buildTextField(
                             'Discount Percentage (%)',
+                            textnputType: TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            formatter: ThousandsFormatter(),
                             textEditingController: discountController,
                           ),
                         ),
@@ -399,19 +476,23 @@ class _AddProductsState extends ConsumerState<AddProducts> {
 
   Widget _buildTextField(
     String hint, {
-    IconData? prefixIcon,
+    Widget? prefixIcon,
     IconData? suffixIcon,
     int maxLines = 1,
     TextEditingController? textEditingController,
+    TextInputFormatter? formatter,
+    TextInputType? textnputType,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: ShadInputFormField(
         maxLines: maxLines,
+        inputFormatters: formatter == null ? null : [formatter!],
         controller: textEditingController,
+        keyboardType: textnputType ?? TextInputType.text,
         style: kTextStyle(14),
         placeholder: hint.style(fontSize: 14, color: Colors.grey),
-        leading: prefixIcon != null ? Icon(prefixIcon) : null,
+        leading: prefixIcon,
         trailing: suffixIcon != null ? Icon(suffixIcon) : null,
         decoration: ShadDecoration(
           border: ShadBorder.all(color: Colors.grey[300]),

@@ -2,24 +2,25 @@ import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_shop_admin_panel/core/providers.dart';
-import 'package:go_shop_admin_panel/features/products/repository/products_repository.dart';
 import 'package:go_shop_admin_panel/model/product.dart';
 
+final productNotifierProvider =
+    AsyncNotifierProvider<ProductsNotifier, List<Product>?>(
+      ProductsNotifier.new,
+    );
+
 class ProductsNotifier extends AsyncNotifier<List<Product>?> {
-  final ProductsRepository _productsRepository;
-
-  ProductsNotifier(this._productsRepository);
-
   @override
   Future<List<Product>?> build() {
     return ref.read(productRepoProvider).fetchProducts();
   }
 
-  void addProducts(Product product, List<Uint8List> images) async {
-    state = AsyncLoading();
+  Future<void> addProducts(Product product, List<Uint8List> images) async {
+    ref.read(appIsLoadingProvider.notifier).state = true;
     state = await AsyncValue.guard(() async {
       ref.read(productRepoProvider).uploadProduct(product, images);
       return ref.read(productRepoProvider).fetchProducts();
     });
+    ref.read(appIsLoadingProvider.notifier).state = false;
   }
 }

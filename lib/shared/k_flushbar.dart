@@ -8,19 +8,16 @@ void displayFlushBar(
   String? message, {
   bool isError = false,
 }) {
-  showFlushbar(
-    context: context,
-    flushbar: Flushbar(
-      message: message,
-      icon: Icon(
-        isError ? Iconsax.tick_circle : Iconsax.danger,
-        size: 28.0,
-        color: isError ? Colors.red : Colors.green,
-      ),
-      margin: EdgeInsets.all(8),
-      borderRadius: BorderRadius.circular(8),
-      duration: Duration(seconds: 3),
-      flushbarPosition: FlushbarPosition.TOP,
+  Flushbar(
+    message: message,
+    icon: Icon(
+      isError ? Iconsax.tick_circle : Iconsax.danger,
+      size: 28.0,
+      color: isError ? Colors.red : Colors.green,
     ),
-  );
+    margin: EdgeInsets.all(8),
+    borderRadius: BorderRadius.circular(8),
+    duration: Duration(seconds: 3),
+    flushbarPosition: FlushbarPosition.TOP,
+  ).show(context);
 }

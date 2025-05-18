@@ -30,9 +30,9 @@ class _DashboardState extends ConsumerState<Dashboard> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           Widget currentContent = switch (ref.watch(dashboardIndexProvider)) {
-            1 => Home(),
-            0 => AddProducts(),
-            2 => Inventory(),
+            0 => Home(),
+            1 => Inventory(),
+            2 => AddProducts(),
             3 => Customers(),
             4 => Orders(),
             _ => Income(),
