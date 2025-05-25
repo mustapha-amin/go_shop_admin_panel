@@ -20,7 +20,7 @@ Future main() async {
     ProviderScope(
       child: Sizer(
         builder: (_, __, ___) {
-          return ShadApp.material(
+          return ShadApp(
             theme: ShadThemeData(
               colorScheme: ShadSlateColorScheme.light(),
               brightness: Brightness.light,

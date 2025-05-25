@@ -12,7 +12,6 @@ import 'package:go_shop_admin_panel/features/dashboard/widgets/drawer.dart';
 import 'package:go_shop_admin_panel/features/products/controllers/product_controller.dart';
 import 'package:go_shop_admin_panel/model/product.dart';
 import 'package:go_shop_admin_panel/shared/k_flushbar.dart';
-import 'package:go_shop_admin_panel/shared/loader.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:pattern_formatter/numeric_formatter.dart';
@@ -134,33 +133,33 @@ class _AddProductsState extends ConsumerState<AddProducts> {
         final isMobile = constraints.maxWidth < 1000;
         return isMobile
             ? ListView(
-              children: [
-                Expanded(child: _buildImagesSection()),
-                _buildInfoSection(full: false),
-                _uploadProductButton(),
-              ],
-            )
+                children: [
+                  Expanded(child: _buildImagesSection()),
+                  _buildInfoSection(full: false),
+                  _uploadProductButton(),
+                ],
+              )
             : ListView(
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildInfoSection(),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _buildImagesSection(),
-                          _uploadProductButton(),
-                        ],
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildInfoSection(),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildImagesSection(),
+                            _uploadProductButton(),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            );
+                    ],
+                  ),
+                ],
+              );
       },
     );
   }
@@ -240,10 +239,9 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 40.h,
-                  child:
-                      pickedImages.isNotEmpty
-                          ? Image.memory(pickedImages[0], fit: BoxFit.contain)
-                          : Center(child: Icon(Iconsax.image_copy, size: 60)),
+                  child: pickedImages.isNotEmpty
+                      ? Image.memory(pickedImages[0], fit: BoxFit.contain)
+                      : Center(child: Icon(Iconsax.image_copy, size: 60)),
                 ),
               ),
               Positioned(
@@ -254,10 +252,9 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                     backgroundColor: Colors.black.withValues(alpha: 0.1),
                   ),
                   onPressed: () {
-                    ref.read(pickedImagesProvider.notifier).state =
-                        pickedImages
-                            .where((image) => pickedImages.indexOf(image) > 0)
-                            .toList();
+                    ref.read(pickedImagesProvider.notifier).state = pickedImages
+                        .where((image) => pickedImages.indexOf(image) > 0)
+                        .toList();
                   },
                   icon: Icon(Icons.close),
                 ),
@@ -290,10 +287,11 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                             height: 20,
                             child: InkWell(
                               onTap: () {
-                                ref.read(pickedImagesProvider.notifier).state =
-                                    pickedImages
-                                        .where((e) => image != e)
-                                        .toList();
+                                ref
+                                    .read(pickedImagesProvider.notifier)
+                                    .state = pickedImages
+                                    .where((e) => image != e)
+                                    .toList();
                               },
                               child: Container(
                                 padding: EdgeInsets.all(3),
@@ -396,13 +394,12 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                               ),
                               underline: SizedBox(),
                               padding: EdgeInsets.symmetric(horizontal: 3),
-                              items:
-                                  productCategories.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value, style: kTextStyle(14)),
-                                    );
-                                  }).toList(),
+                              items: productCategories.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value, style: kTextStyle(14)),
+                                );
+                              }).toList(),
                               onChanged: (String? newValue) {
                                 ref.read(categoryProvider.notifier).state =
                                     newValue!;
