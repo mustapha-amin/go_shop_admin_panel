@@ -44,6 +44,7 @@ class ProductsNotifier extends AsyncNotifier<List<Product>?> {
           .updateProduct(product, newImages: newImages);
       return ref.read(productRepoProvider).fetchProducts();
     });
+    ref.invalidateSelf();
     ref.read(appIsLoadingProvider.notifier).state = false;
   }
 }
