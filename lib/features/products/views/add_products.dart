@@ -204,6 +204,7 @@ class _AddProductsState extends ConsumerState<AddProducts> {
               ref.invalidate(categoryProvider);
               ref.invalidate(brandProvider);
               ref.invalidate(dashboardIndexProvider);
+              ref.invalidate(productNotifierProvider);
             }
           },
         );
