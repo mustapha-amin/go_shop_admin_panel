@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_shop_admin_panel/consts/assets.dart';
 import 'package:go_shop_admin_panel/core/extensions.dart';
+import 'package:go_shop_admin_panel/features/products/controllers/product_controller.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 final dashboardIndexProvider = StateProvider<int>((ref) => 0);
@@ -29,29 +30,27 @@ class CustomTile extends ConsumerWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 8),
         horizontalTitleGap: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        tileColor:
-            index == ref.watch(dashboardIndexProvider)
-                ? Theme.of(context).primaryColor
-                : Colors.transparent,
+        tileColor: index == ref.watch(dashboardIndexProvider)
+            ? Theme.of(context).primaryColor
+            : Colors.transparent,
         leading: Icon(
           iconData,
           size: 15,
-          color:
-              index == ref.watch(dashboardIndexProvider)
-                  ? Colors.white
-                  : Colors.black,
+          color: index == ref.watch(dashboardIndexProvider)
+              ? Colors.white
+              : Colors.black,
         ),
         onTap: () {
           ref.read(dashboardIndexProvider.notifier).state = index;
+          if (index == 1) ref.invalidate(productNotifierProvider);
         },
         title: Text(
           title,
           style: TextStyle(
             fontSize: 12,
-            color:
-                index == ref.watch(dashboardIndexProvider)
-                    ? Colors.white
-                    : Colors.black,
+            color: index == ref.watch(dashboardIndexProvider)
+                ? Colors.white
+                : Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
