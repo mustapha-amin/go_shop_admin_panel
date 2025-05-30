@@ -1,73 +1,130 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_shop_admin_panel/consts/product_categories.dart';
+import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/features/products/controllers/product_controller.dart';
 import 'package:go_shop_admin_panel/model/product.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:go_shop_admin_panel/consts/textstyle.dart';
 
 class Inventory extends ConsumerWidget {
   const Inventory({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final categoryCounts = ref.watch(categoryCountsProvider);
+    final selectedCategory = ref.watch(selectedCategoryProvider);
+    final filteredProducts = ref.watch(filteredProductsProvider);
+
     return ref
         .watch(productNotifierProvider)
         .when(
           data: (products) {
             return SizedBox(
               width: 60.w,
-              child: ListView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ...products!.map(
-                    (product) => Card(
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            product.imageUrls![0],
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
+                  // Category Filter Chips
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          ...['All', ...productCategories].map(
+                            (category) => Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: FilterChip(
+                                label: Text(
+                                  '$category (${categoryCounts[category] ?? 0})',
+                                  style: kTextStyle(
+                                    14,
+                                    color: selectedCategory == category
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                                selected: selectedCategory == category,
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    ref
+                                            .read(
+                                              selectedCategoryProvider.notifier,
+                                            )
+                                            .state =
+                                        category;
+                                  }
+                                },
+                                backgroundColor: Colors.grey[200],
+                                selectedColor: Theme.of(context).primaryColor,
+                                checkmarkColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Products List
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        ...filteredProducts.map(
+                          (product) => Card(
+                            child: ListTile(
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  product.imageUrls![0],
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              title: Text(
+                                product.name,
+                                style: kTextStyle(16, isBold: true),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Price: ${NumberFormat.simpleCurrency(name: "N", decimalDigits: 0).format(product.basePrice)}',
+                                    style: kTextStyle(14),
+                                  ),
+                                  Text(
+                                    'Stock: ${product.quantity}',
+                                    style: kTextStyle(14),
+                                  ),
+                                  Text(
+                                    'Brand: ${product.brand}',
+                                    style: kTextStyle(14),
+                                  ),
+                                ],
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () =>
+                                        _showEditDialog(context, ref, product),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () => _showDeleteDialog(
+                                      context,
+                                      ref,
+                                      product.id,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                        title: Text(
-                          product.name,
-                          style: kTextStyle(16, isBold: true),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Price: ${NumberFormat.simpleCurrency(name: "N", decimalDigits: 0).format(product.basePrice)}',
-                              style: kTextStyle(14),
-                            ),
-                            Text(
-                              'Stock: ${product.quantity}',
-                              style: kTextStyle(14),
-                            ),
-                            Text(
-                              'Brand: ${product.brand}',
-                              style: kTextStyle(14),
-                            ),
-                          ],
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () =>
-                                  _showEditDialog(context, ref, product),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () =>
-                                  _showDeleteDialog(context, ref, product.id),
-                            ),
-                          ],
-                        ),
-                      ),
+                      ],
                     ),
                   ),
                 ],

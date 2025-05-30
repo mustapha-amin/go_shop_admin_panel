@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class DashboardSummaryCard extends StatelessWidget {
   final int customers;
@@ -34,7 +35,10 @@ class DashboardSummaryCard extends StatelessWidget {
           Expanded(
             child: CardItem(
               title: 'Income',
-              value: '\$${income.toStringAsFixed(2)}',
+              value: NumberFormat.simpleCurrency(
+                name: 'N',
+                decimalDigits: 0,
+              ).format(income),
               percentage: growthPercentage,
             ),
           ),

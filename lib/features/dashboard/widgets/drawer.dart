@@ -95,11 +95,6 @@ class DashboardDrawer extends ConsumerWidget {
             index: 3,
           ),
           CustomTile(title: 'Orders', iconData: Iconsax.receipt_copy, index: 4),
-          CustomTile(
-            title: 'Income',
-            iconData: Iconsax.dollar_circle_copy,
-            index: 5,
-          ),
         ],
       ),
     );

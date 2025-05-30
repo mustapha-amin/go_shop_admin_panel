@@ -4,6 +4,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_shop_admin_panel/core/providers.dart';
 import 'package:go_shop_admin_panel/model/product.dart';
 
+final selectedCategoryProvider = StateProvider<String>((ref) => 'All');
+
+final filteredProductsProvider = Provider<List<Product>>((ref) {
+  final products = ref.watch(productNotifierProvider).value ?? [];
+  final selectedCategory = ref.watch(selectedCategoryProvider);
+
+  if (selectedCategory == 'All') {
+    return products;
+  }
+
+  return products
+      .where((product) => product.category == selectedCategory)
+      .toList();
+});
+
+final categoryCountsProvider = Provider<Map<String, int>>((ref) {
+  final products = ref.watch(productNotifierProvider).value ?? [];
+  final counts = <String, int>{'All': products.length};
+
+  for (final product in products) {
+    counts[product.category] = (counts[product.category] ?? 0) + 1;
+  }
+
+  return counts;
+});
+
 final productNotifierProvider =
     AsyncNotifierProvider<ProductsNotifier, List<Product>?>(
       ProductsNotifier.new,

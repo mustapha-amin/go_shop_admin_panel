@@ -4,7 +4,6 @@ import 'package:go_shop_admin_panel/core/extensions.dart';
 import 'package:go_shop_admin_panel/features/customers/views/cutomers.dart';
 import 'package:go_shop_admin_panel/features/dashboard/widgets/drawer.dart';
 import 'package:go_shop_admin_panel/features/home/views/home.dart';
-import 'package:go_shop_admin_panel/features/income/views/income.dart';
 import 'package:go_shop_admin_panel/features/orders/views/orders.dart';
 import 'package:go_shop_admin_panel/features/products/views/add_products.dart';
 import 'package:go_shop_admin_panel/features/products/views/inventory.dart';
@@ -34,8 +33,7 @@ class _DashboardState extends ConsumerState<Dashboard> {
             1 => Inventory(),
             2 => AddProducts(),
             3 => Customers(),
-            4 => Orders(),
-            _ => Income(),
+            _ => Orders(),
           };
           final isMobile = constraints.maxWidth < 750;
           if (!isMobile) {
