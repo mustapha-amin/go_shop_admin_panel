@@ -30,11 +30,7 @@ A Flutter-based admin panel for managing an e-commerce platform. This admin pane
 
 ### Order Management
 - Comprehensive order tracking
-- Order details including
-
-https://github.com/user-attachments/assets/ef231e1b-0f35-4c73-aa32-567aa4c36cbe
-
-
+- Order details including:
   - Customer information
   - Product details
   - Order status
@@ -101,5 +97,5 @@ lib/
 
 
 
-Uploading Screen Recording 2025-05-30 160841.mp4…
+https://github.com/user-attachments/assets/ef231e1b-0f35-4c73-aa32-567aa4c36cbe
 
