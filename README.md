@@ -2,6 +2,8 @@
 
 A Flutter-based admin panel for managing an e-commerce platform. This admin panel provides comprehensive tools for managing products, orders, and customers.
 
+Client app: https://github.com/mustapha-amin/go_shop.git
+
 ## Features
 
 ### Dashboard
