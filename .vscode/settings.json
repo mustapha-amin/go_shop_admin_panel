@@ -6,5 +6,5 @@
         "scminput": false
     },
     "dart.flutterWebRenderer": "flutter-default",
-    "dart.flutterHotReloadOnSave": "all"
+    "dart.flutterHotReloadOnSave": "manual"
 }

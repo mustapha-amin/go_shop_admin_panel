@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_shop_admin_panel/features/products/controllers/product_controller.dart';
 import 'package:go_shop_admin_panel/model/product.dart';
-import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';

@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_shop_admin_panel/consts/product_categories.dart';
 import 'package:go_shop_admin_panel/consts/textstyle.dart';
 import 'package:go_shop_admin_panel/core/extensions.dart';
 import 'package:go_shop_admin_panel/features/dashboard/widgets/drawer.dart';
@@ -39,15 +40,6 @@ final formIsValidProvider = StateProvider<bool>((ref) {
       ref.watch(categoryProvider)!.isNotEmpty &&
       ref.watch(brandProvider).isNotEmpty;
 });
-
-final List<String> productCategories = [
-  'Appliances',
-  'Phones and tablets',
-  'Electronics',
-  'Computing',
-  'Clothing',
-  'Other',
-];
 
 class AddProducts extends ConsumerStatefulWidget {
   const AddProducts({super.key});
@@ -134,8 +126,8 @@ class _AddProductsState extends ConsumerState<AddProducts> {
         return isMobile
             ? ListView(
                 children: [
-                  Expanded(child: _buildImagesSection()),
-                  _buildInfoSection(full: false),
+                  Row(children: [Expanded(child: _buildImagesSection())]),
+                  _buildInfoSection(),
                   _uploadProductButton(),
                 ],
               )
@@ -145,7 +137,7 @@ class _AddProductsState extends ConsumerState<AddProducts> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoSection(),
+                      Expanded(flex: 2, child: _buildInfoSection()),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -330,138 +322,135 @@ class _AddProductsState extends ConsumerState<AddProducts> {
     );
   }
 
-  Widget _buildInfoSection({bool full = true}) {
-    return Expanded(
-      flex: full ? 2 : 1,
-      child: Column(
-        children: [
-          Column(
-            spacing: 10,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2,
-                      blurStyle: BlurStyle.outer,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    _buildSectionTitle('General Information'),
-                    _buildTextField(
-                      'Product Name',
-                      textEditingController: productNameController,
-                    ),
-                    _buildTextField(
-                      'Description',
-                      maxLines: 10,
-                      textEditingController: descriptionController,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildTextField(
-                            'Quantity',
-                            textEditingController: quantityController,
-                            textnputType: TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            formatter: ThousandsFormatter(),
-                          ),
-                        ),
-                        Expanded(
-                          child: _buildTextField(
-                            'Brand',
-                            textEditingController: brandController,
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey[300]!),
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.grey[200],
-                            ),
-                            child: DropdownButton<String>(
-                              value: ref.watch(categoryProvider),
-                              hint: Text(
-                                'Select Category',
-                                style: kTextStyle(14),
-                              ),
-                              underline: SizedBox(),
-                              padding: EdgeInsets.symmetric(horizontal: 3),
-                              items: productCategories.map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value, style: kTextStyle(14)),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                ref.read(categoryProvider.notifier).state =
-                                    newValue!;
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ).padAll(8),
+  Widget _buildInfoSection() {
+    return Column(
+      children: [
+        Column(
+          spacing: 10,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 2,
+                    blurStyle: BlurStyle.outer,
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2,
-                      blurStyle: BlurStyle.outer,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    _buildSectionTitle('Pricing'),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildTextField(
-                            'Base Price',
-                            prefixIcon: Text('₦'),
-                            textEditingController: priceController,
-                            formatter: ThousandsFormatter(),
-                            textnputType: TextInputType.numberWithOptions(
-                              decimal: true,
+              child: Column(
+                children: [
+                  _buildSectionTitle('General Information'),
+                  _buildTextField(
+                    'Product Name',
+                    textEditingController: productNameController,
+                  ),
+                  _buildTextField(
+                    'Description',
+                    maxLines: 10,
+                    textEditingController: descriptionController,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildTextField(
+                          'Quantity',
+                          textEditingController: quantityController,
+                          textnputType: TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          formatter: ThousandsFormatter(),
+                        ),
+                      ),
+                      Expanded(
+                        child: _buildTextField(
+                          'Brand',
+                          textEditingController: brandController,
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey[300]!),
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.grey[200],
+                          ),
+                          child: DropdownButton<String>(
+                            value: ref.watch(categoryProvider),
+                            hint: Text(
+                              'Select Category',
+                              style: kTextStyle(14),
                             ),
+                            underline: SizedBox(),
+                            padding: EdgeInsets.symmetric(horizontal: 3),
+                            items: productCategories.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value, style: kTextStyle(14)),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              ref.read(categoryProvider.notifier).state =
+                                  newValue!;
+                            },
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _buildTextField(
-                            'Discount Percentage (%)',
-                            textnputType: TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            formatter: ThousandsFormatter(),
-                            textEditingController: discountController,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ).padAll(8),
+                      ),
+                    ],
+                  ),
+                ],
+              ).padAll(8),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 2,
+                    blurStyle: BlurStyle.outer,
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-            ],
-          ).padAll(8),
-        ],
-      ),
+              child: Column(
+                children: [
+                  _buildSectionTitle('Pricing'),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildTextField(
+                          'Base Price',
+                          prefixIcon: Text('₦'),
+                          textEditingController: priceController,
+                          formatter: ThousandsFormatter(),
+                          textnputType: TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _buildTextField(
+                          'Discount Percentage (%)',
+                          textnputType: TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          formatter: ThousandsFormatter(),
+                          textEditingController: discountController,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ).padAll(8),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ).padAll(8),
+      ],
     );
   }
 
